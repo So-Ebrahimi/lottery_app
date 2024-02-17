@@ -14,13 +14,25 @@ def main_page() :
 
 def update_db(path)  :
     """update database from xlsx file  """
-    # conn = sqlite3.connect(host='', port=0, timeout=None, source_address=None)
-    # curl = conn.crusor()
-    # curl.execute(sql)
+    conn = sqlite3.connect("sql.db")
+    curl = conn.cursor()
+    # Drop the PEOPLE  table if already exists.
+    curl.execute("DROP TABLE IF EXISTS PEOPLE")
+    # Creating table
+    table = """ CREATE TABLE PEOPLE (
+            ROW INT,
+			NAME CHAR(25) NOT NULL,
+			PHONE INT   
+		); """
+
+    curl.execute(table)
+    #upload new data to db 
     df = pd.read_excel(path)
-    # df headers = index , name , phone 
-    for  name , phone in df.iterrows() : 
-        print( name , phone)
+    df.to_sql(name='PEOPLE',con=conn,if_exists='replace',index=True)
+    conn.commit()
+    conn.close()
+    print("Db  updated suxcesfully")
+
 
 
 if __name__ ==  "__main__":
