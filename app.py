@@ -1,4 +1,6 @@
-from flask import Flask , Response, redirect, url_for, request, session, abort
+import os
+from werkzeug.utils import secure_filename
+from flask import Flask , Response, redirect, url_for, request, session, abort , flash
 from flask_login import LoginManager, UserMixin, \
                                 login_required, login_user, logout_user 
 import pandas as pd
@@ -6,6 +8,10 @@ import sqlite3
 
 
 app = Flask(__name__)
+
+UPLOAD_FOLDER = '/tmp'
+ALLOWED_EXTENSIONS = {'xlsx'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # config
 app.config.update(
@@ -31,12 +37,49 @@ class User(UserMixin):
 user = User(0)
 
 
-# some protected url
-@app.route('/')
-@login_required
-def home():
-    return Response("Hello World!")
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# some protected url
+@app.route('/', methods=['GET', 'POST'])
+@login_required
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            session['info'] = 'No file part'
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            session['info'] = "No selected file" 
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+            numberOfRows = update_db(file_path)
+            session['info'] = f'imported {numberOfRows} people ' 
+            os.remove(file_path)
+            return redirect("/")
+    info = session.get("info" , "")
+    session['info'] =  ''
+    return f'''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <h3>{info}</h3>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''
 # somewhere to login
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -88,10 +131,12 @@ def update_db(path)  :
     #upload new data to db 
     df = pd.read_excel(path)
     df.to_sql(name='PEOPLE',con=conn,if_exists='replace',index=False)
+    curl.execute("SELECT Count() FROM PEOPLE" )
+    numberOfRows = curl.fetchone()[0]
     conn.commit()
     conn.close()
     print("Db  updated suxcesfully")
-
+    return (numberOfRows)
 def Find_prize_slice(table_name , count_winner ) :
     '''this function  find winner by count of prize in table '''
     conn = sqlite3.connect("sql.db")
@@ -129,5 +174,4 @@ def Find_winner_id( table_name, numberOfRows , prize_slice ,winner_id ):
 
 
 if __name__ ==  "__main__":
-    update_db("data.xlsx")
     app.run(host="0.0.0.0", port="12345",debug=True)
