@@ -3,13 +3,14 @@ from werkzeug.utils import secure_filename
 from flask import Flask , Response, redirect, url_for, request, session, abort , flash , render_template
 from flask_login import LoginManager, UserMixin, \
                                 login_required, login_user, logout_user 
-import pandas as pd
+import pandas as pd 
 import sqlite3
+
 
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = '/tmp'
+UPLOAD_FOLDER = ''
 ALLOWED_EXTENSIONS = {'xlsx'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -40,7 +41,8 @@ user = User(0)
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 
 # some protected url
@@ -54,17 +56,17 @@ def upload_file():
             session['info'] = 'No file part'
             return redirect(request.url)
         file = request.files['file']
+        table_name = request.form.get('table_name')
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
             flash('No selected file')
-            session['info'] = "No selected file" 
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
-            numberOfRows = update_db(file_path)
+            numberOfRows = update_db(file_path, table_name)
             session['info'] = f'imported {numberOfRows} people ' 
             os.remove(file_path)
             return redirect("/")
@@ -76,11 +78,14 @@ def upload_file():
     <h1>Upload new File</h1>
     <h3>{info}</h3>
     <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
+    <input type=file name=file>
+    <input type=submit value=Upload>
     </form>
     '''
-    return render_template("index.html")
+    df = table_view_of_db("PEOPLE")
+    
+    return render_template("index.html",info=info,column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
+
 
 # somewhere to login
 @app.route("/login", methods=["GET", "POST"])
@@ -125,21 +130,28 @@ def load_user(userid):
 
 
 
+def table_view_of_db(table_name) :
+        '''this function  findshow all of the memeber of db  '''
+        con = sqlite3.connect("sql.db")
+        sql_query = pd.read_sql(f"SELECT * FROM {table_name}", con)
+        df = pd.DataFrame(sql_query)
+        return (df)
 
-
-def update_db(path)  :
+def update_db(path ,table_name)  :
     """update database from xlsx file  """
     conn = sqlite3.connect("sql.db")
     curl = conn.cursor()
     #upload new data to db 
     df = pd.read_excel(path)
     df.to_sql(name='PEOPLE',con=conn,if_exists='replace',index=False)
-    curl.execute("SELECT Count() FROM PEOPLE" )
+    curl.execute(f"SELECT Count(*) FROM {table_name}" )
     numberOfRows = curl.fetchone()[0]
     conn.commit()
     conn.close()
     print("Db  updated suxcesfully")
     return (numberOfRows)
+
+
 def Find_prize_slice(table_name , count_winner ) :
     '''this function  find winner by count of prize in table '''
     conn = sqlite3.connect("sql.db")

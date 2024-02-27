@@ -1,0 +1,304 @@
+[
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "secure_filename",
+        "importPath": "werkzeug.utils",
+        "description": "werkzeug.utils",
+        "isExtraImport": true,
+        "detail": "werkzeug.utils",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "redirect",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "url_for",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "session",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "abort",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "flash",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "LoginManager",
+        "importPath": "flask_login",
+        "description": "flask_login",
+        "isExtraImport": true,
+        "detail": "flask_login",
+        "documentation": {}
+    },
+    {
+        "label": "UserMixin",
+        "importPath": "flask_login",
+        "description": "flask_login",
+        "isExtraImport": true,
+        "detail": "flask_login",
+        "documentation": {}
+    },
+    {
+        "label": "\\",
+        "importPath": "flask_login",
+        "description": "flask_login",
+        "isExtraImport": true,
+        "detail": "flask_login",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "sqlite3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlite3",
+        "description": "sqlite3",
+        "detail": "sqlite3",
+        "documentation": {}
+    },
+    {
+        "label": "User",
+        "kind": 6,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "class User(UserMixin):\n    def __init__(self, id):\n        self.id = id\n    def __repr__(self):\n        return \"%d\" % (self.id)\n# create some users with ids 1 to 20       \nuser = User(0)\ndef allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "allowed_file",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef upload_file():\n    if request.method == 'POST':\n        # check if the post request has the file part\n        if 'file' not in request.files:",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "upload_file",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def upload_file():\n    if request.method == 'POST':\n        # check if the post request has the file part\n        if 'file' not in request.files:\n            flash('No file part')\n            session['info'] = 'No file part'\n            return redirect(request.url)\n        file = request.files['file']\n        table_name = request.form.get('table_name')\n        # If the user does not select a file, the browser submits an",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "login",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def login():\n    if request.method == 'POST':\n        username = request.form['username']\n        password = request.form['password']        \n        if username == \"sobhan\" and password == \"1234\" :\n            login_user(user)\n            return redirect(\"/\")\n        else:\n            return abort(401)\n    else:",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "logout",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def logout():\n    logout_user()\n    return Response('<p>Logged out</p>')\n# handle login failed\n@app.errorhandler(401)\ndef page_not_found(e):\n    return Response('<p>Login failed</p>')\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "page_not_found",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def page_not_found(e):\n    return Response('<p>Login failed</p>')\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)\ndef table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(\"sql.db\")\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "load_user",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def load_user(userid):\n    return User(userid)\ndef table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(\"sql.db\")\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)\n        df = pd.DataFrame(sql_query)\n        return (df)\ndef update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "table_view_of_db",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(\"sql.db\")\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)\n        df = pd.DataFrame(sql_query)\n        return (df)\ndef update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "update_db",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    #upload new data to db \n    df = pd.read_excel(path)\n    df.to_sql(name='PEOPLE',con=conn,if_exists='replace',index=False)\n    curl.execute(f\"SELECT Count(*) FROM {table_name}\" )\n    numberOfRows = curl.fetchone()[0]\n    conn.commit()",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "Find_prize_slice",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def Find_prize_slice(table_name , count_winner ) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    curl.execute(\"SELECT Count() FROM %s\" % table_name )\n    numberOfRows = curl.fetchone()[0]\n    prize_slice = numberOfRows /  count_winner\n    prize_slice = int(prize_slice)\n    return (numberOfRows, prize_slice)\ndef find_winner_from_db(table_name , id) :",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "find_winner_from_db",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def find_winner_from_db(table_name , id) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    rowsQuery = f\"SELECT * FROM {table_name} where ROW='{id}'\"\n    print(rowsQuery)\n    curl.execute(rowsQuery)\n    rows = curl.fetchall()\n    winner_name , winer_phone = rows[0][1] , rows[0][2]\n    return (winner_name , winer_phone)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "Find_winner_id",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def Find_winner_id( table_name, numberOfRows , prize_slice ,winner_id ):\n    \"\"\"this function find winner id and  return it  \"\"\"\n    range_win = int(numberOfRows / prize_slice ) \n    winners_list = []\n    start = 0 \n    for winer  in range(range_win):\n        id =  start + winner_id \n        winner_name , winer_phone = find_winner_from_db(table_name , id) \n        print(\"winner_name , winer_phone\")\nif __name__ ==  \"__main__\":",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "app = Flask(__name__)\nUPLOAD_FOLDER = ''\nALLOWED_EXTENSIONS = {'xlsx'}\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n# config\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "UPLOAD_FOLDER",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "UPLOAD_FOLDER = ''\nALLOWED_EXTENSIONS = {'xlsx'}\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n# config\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()\nlogin_manager.init_app(app)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "ALLOWED_EXTENSIONS",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "ALLOWED_EXTENSIONS = {'xlsx'}\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n# config\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()\nlogin_manager.init_app(app)\nlogin_manager.login_view = \"login\"",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "app.config['UPLOAD_FOLDER']",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n# config\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()\nlogin_manager.init_app(app)\nlogin_manager.login_view = \"login\"\nclass User(UserMixin):",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "login_manager",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "login_manager = LoginManager()\nlogin_manager.init_app(app)\nlogin_manager.login_view = \"login\"\nclass User(UserMixin):\n    def __init__(self, id):\n        self.id = id\n    def __repr__(self):\n        return \"%d\" % (self.id)\n# create some users with ids 1 to 20       \nuser = User(0)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "login_manager.login_view",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "login_manager.login_view = \"login\"\nclass User(UserMixin):\n    def __init__(self, id):\n        self.id = id\n    def __repr__(self):\n        return \"%d\" % (self.id)\n# create some users with ids 1 to 20       \nuser = User(0)\ndef allowed_file(filename):\n    return '.' in filename and \\",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "user",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "user = User(0)\ndef allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef upload_file():\n    if request.method == 'POST':\n        # check if the post request has the file part",
+        "detail": "app",
+        "documentation": {}
+    }
+]
