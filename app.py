@@ -1,6 +1,6 @@
 import os
 from werkzeug.utils import secure_filename
-from flask import Flask , Response, redirect, url_for, request, session, abort , flash
+from flask import Flask , Response, redirect, url_for, request, session, abort , flash , render_template
 from flask_login import LoginManager, UserMixin, \
                                 login_required, login_user, logout_user 
 import pandas as pd
@@ -70,7 +70,7 @@ def upload_file():
             return redirect("/")
     info = session.get("info" , "")
     session['info'] =  ''
-    return f'''
+    html_str =  f'''
     <!doctype html>
     <title>Upload new File</title>
     <h1>Upload new File</h1>
@@ -80,6 +80,8 @@ def upload_file():
       <input type=submit value=Upload>
     </form>
     '''
+    return render_template("index.html")
+
 # somewhere to login
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -92,13 +94,14 @@ def login():
         else:
             return abort(401)
     else:
-        return Response('''
+        login_html = Response('''
         <form action="" method="post">
             <p><input type=text name=username>
             <p><input type=password name=password>
             <p><input type=submit value=Login>
         </form>
         ''')
+        return render_template("login.html")
 
 
 # somewhere to logout
