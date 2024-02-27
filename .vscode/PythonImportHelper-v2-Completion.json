@@ -167,6 +167,15 @@
         "documentation": {}
     },
     {
+        "label": "db",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def db()  :\n    df = table_view_of_db(\"PEOPLE\")\n    if request.method == 'POST':\n        try :\n            table_name = request.form.get('table_name')\n            df = table_view_of_db(table_name)\n        except :\n            return(\"error\")\n    return render_template(\"tables.html\",column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)\n# somewhere to logout",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
         "label": "logout",
         "kind": 2,
         "importPath": "app",
@@ -189,7 +198,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def load_user(userid):\n    return User(userid)\ndef table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(\"sql.db\")\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)\n        df = pd.DataFrame(sql_query)\n        return (df)\ndef update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"",
+        "peekOfCode": "def load_user(userid):\n    return User(userid)\ndef table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(\"sql.db\")\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)\n        df = pd.DataFrame(sql_query)\n        con.commit()\n        con.close()\n        return (df)",
         "detail": "app",
         "documentation": {}
     },
@@ -198,7 +207,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(\"sql.db\")\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)\n        df = pd.DataFrame(sql_query)\n        return (df)\ndef update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()",
+        "peekOfCode": "def table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(\"sql.db\")\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)\n        df = pd.DataFrame(sql_query)\n        con.commit()\n        con.close()\n        return (df)\ndef update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"",
         "detail": "app",
         "documentation": {}
     },
@@ -216,7 +225,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def Find_prize_slice(table_name , count_winner ) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    curl.execute(\"SELECT Count() FROM %s\" % table_name )\n    numberOfRows = curl.fetchone()[0]\n    prize_slice = numberOfRows /  count_winner\n    prize_slice = int(prize_slice)\n    return (numberOfRows, prize_slice)\ndef find_winner_from_db(table_name , id) :",
+        "peekOfCode": "def Find_prize_slice(table_name , count_winner ) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    curl.execute(\"SELECT Count() FROM %s\" % table_name )\n    conn.commit()\n    conn.close()\n    numberOfRows = curl.fetchone()[0]\n    prize_slice = numberOfRows /  count_winner\n    prize_slice = int(prize_slice)",
         "detail": "app",
         "documentation": {}
     },
@@ -225,7 +234,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def find_winner_from_db(table_name , id) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    rowsQuery = f\"SELECT * FROM {table_name} where ROW='{id}'\"\n    print(rowsQuery)\n    curl.execute(rowsQuery)\n    rows = curl.fetchall()\n    winner_name , winer_phone = rows[0][1] , rows[0][2]\n    return (winner_name , winer_phone)",
+        "peekOfCode": "def find_winner_from_db(table_name , id) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    rowsQuery = f\"SELECT * FROM {table_name} where ROW='{id}'\"\n    print(rowsQuery)\n    curl.execute(rowsQuery)\n    rows = curl.fetchall()\n    conn.commit()\n    conn.close()",
         "detail": "app",
         "documentation": {}
     },

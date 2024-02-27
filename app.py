@@ -72,19 +72,7 @@ def upload_file():
             return redirect("/")
     info = session.get("info" , "")
     session['info'] =  ''
-    html_str =  f'''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <h3>{info}</h3>
-    <form method=post enctype=multipart/form-data>
-    <input type=file name=file>
-    <input type=submit value=Upload>
-    </form>
-    '''
-    df = table_view_of_db("PEOPLE")
-    
-    return render_template("index.html",info=info,column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
+    return render_template("index.html",info=info)
 
 
 # somewhere to login
@@ -108,6 +96,18 @@ def login():
         ''')
         return render_template("login.html")
 
+
+@app.route('/database', methods=['GET', 'POST'])
+@login_required
+def db()  :
+    df = table_view_of_db("PEOPLE")
+    if request.method == 'POST':
+        try :
+            table_name = request.form.get('table_name')
+            df = table_view_of_db(table_name)
+        except :
+            return("error")
+    return render_template("tables.html",column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
 
 # somewhere to logout
 @app.route("/logout")
@@ -135,6 +135,8 @@ def table_view_of_db(table_name) :
         con = sqlite3.connect("sql.db")
         sql_query = pd.read_sql(f"SELECT * FROM {table_name}", con)
         df = pd.DataFrame(sql_query)
+        con.commit()
+        con.close()
         return (df)
 
 def update_db(path ,table_name)  :
@@ -157,6 +159,8 @@ def Find_prize_slice(table_name , count_winner ) :
     conn = sqlite3.connect("sql.db")
     curl = conn.cursor()
     curl.execute("SELECT Count() FROM %s" % table_name )
+    conn.commit()
+    conn.close()
     numberOfRows = curl.fetchone()[0]
     prize_slice = numberOfRows /  count_winner
     prize_slice = int(prize_slice)
@@ -171,6 +175,8 @@ def find_winner_from_db(table_name , id) :
     print(rowsQuery)
     curl.execute(rowsQuery)
     rows = curl.fetchall()
+    conn.commit()
+    conn.close()
     winner_name , winer_phone = rows[0][1] , rows[0][2]
     return (winner_name , winer_phone)
 
