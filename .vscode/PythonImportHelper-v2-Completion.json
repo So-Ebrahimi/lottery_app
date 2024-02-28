@@ -144,16 +144,16 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef upload_file():\n    if request.method == 'POST':\n        # check if the post request has the file part\n        if 'file' not in request.files:",
+        "peekOfCode": "def allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef root():\n    return render_template(\"index.html\")\n# somewhere to login\n@app.route(\"/login\", methods=[\"GET\", \"POST\"])",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "upload_file",
+        "label": "root",
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def upload_file():\n    if request.method == 'POST':\n        # check if the post request has the file part\n        if 'file' not in request.files:\n            flash('No file part')\n            session['info'] = 'No file part'\n            return redirect(request.url)\n        file = request.files['file']\n        table_name = request.form.get('table_name')\n        # If the user does not select a file, the browser submits an",
+        "peekOfCode": "def root():\n    return render_template(\"index.html\")\n# somewhere to login\n@app.route(\"/login\", methods=[\"GET\", \"POST\"])\ndef login():\n    if request.method == 'POST':\n        username = request.form['username']\n        password = request.form['password']        \n        if username == \"sobhan\" and password == \"1234\" :\n            login_user(user)",
         "detail": "app",
         "documentation": {}
     },
@@ -171,7 +171,16 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def db()  :\n    df = table_view_of_db(\"PEOPLE\")\n    if request.method == 'POST':\n        try :\n            table_name = request.form.get('table_name')\n            df = table_view_of_db(table_name)\n        except :\n            return(\"error\")\n    return render_template(\"tables.html\",column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)\n# somewhere to logout",
+        "peekOfCode": "def db()  :\n    df = table_view_of_db(\"PEOPLE\")\n    if request.method == 'POST':\n        try :\n            table_name = request.form.get('table_name')\n            df = table_view_of_db(table_name)\n        except :\n            return(\"error\")\n    return render_template(\"tables_db.html\",column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)\n@app.route(\"/updatedb\" ,  methods=['GET', 'POST'])",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "upload_file",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def upload_file():\n    if request.method == 'POST':\n        # check if the post request has the file part\n        if 'file' not in request.files:\n            flash('No file part')\n            session['info'] = 'No file part'\n            return redirect(request.url)\n        file = request.files['file']\n        table_name = request.form.get('table_name')\n        # If the user does not select a file, the browser submits an",
         "detail": "app",
         "documentation": {}
     },
@@ -306,7 +315,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "user = User(0)\ndef allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef upload_file():\n    if request.method == 'POST':\n        # check if the post request has the file part",
+        "peekOfCode": "user = User(0)\ndef allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef root():\n    return render_template(\"index.html\")\n# somewhere to login",
         "detail": "app",
         "documentation": {}
     }

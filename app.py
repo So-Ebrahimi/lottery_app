@@ -48,6 +48,40 @@ def allowed_file(filename):
 # some protected url
 @app.route('/', methods=['GET', 'POST'])
 @login_required
+def root():
+
+    return render_template("index.html")
+
+
+# somewhere to login
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']        
+        if username == "sobhan" and password == "1234" :
+            login_user(user)
+            return redirect("/")
+        else:
+            return abort(401)
+    else:
+        return render_template("login.html")
+
+
+@app.route('/database', methods=['GET', 'POST'])
+@login_required
+def db()  :
+    df = table_view_of_db("PEOPLE")
+    if request.method == 'POST':
+        try :
+            table_name = request.form.get('table_name')
+            df = table_view_of_db(table_name)
+        except :
+            return("error")
+    return render_template("tables_db.html",column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
+
+@app.route("/updatedb" ,  methods=['GET', 'POST'])
+@login_required
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -69,45 +103,10 @@ def upload_file():
             numberOfRows = update_db(file_path, table_name)
             session['info'] = f'imported {numberOfRows} people ' 
             os.remove(file_path)
-            return redirect("/")
+            return redirect("/updatedb")
     info = session.get("info" , "")
     session['info'] =  ''
-    return render_template("index.html",info=info)
-
-
-# somewhere to login
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']        
-        if username == "sobhan" and password == "1234" :
-            login_user(user)
-            return redirect("/")
-        else:
-            return abort(401)
-    else:
-        login_html = Response('''
-        <form action="" method="post">
-            <p><input type=text name=username>
-            <p><input type=password name=password>
-            <p><input type=submit value=Login>
-        </form>
-        ''')
-        return render_template("login.html")
-
-
-@app.route('/database', methods=['GET', 'POST'])
-@login_required
-def db()  :
-    df = table_view_of_db("PEOPLE")
-    if request.method == 'POST':
-        try :
-            table_name = request.form.get('table_name')
-            df = table_view_of_db(table_name)
-        except :
-            return("error")
-    return render_template("tables.html",column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
+    return render_template("update_db.html",info=info)
 
 # somewhere to logout
 @app.route("/logout")
