@@ -49,9 +49,23 @@ def allowed_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def root():
-
-    return render_template("index.html")
-
+    df = pd.DataFrame()
+    numberOfRows, prize_slice  = " " , " " 
+    
+    if request.method == 'POST':
+        try : 
+            table_name = request.form.get('table_name')
+            count_winner =  int(request.form.get('count_winner'))
+            numberOfRows , prize_slice = Find_prize_slice(table_name , count_winner )
+            winner_id = int(request.form.get('winner_id'))
+            winners_dict = Find_winner_id( table_name , numberOfRows , prize_slice ,winner_id )
+            df = pd.DataFrame(winners_dict) 
+            df = df.T
+        except :
+            pass            
+    return render_template("base_lottery.html" , numberOfRows=numberOfRows  , prize_slice=prize_slice ,
+                                        column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
+    
 
 # somewhere to login
 @app.route("/login", methods=["GET", "POST"])
@@ -144,7 +158,8 @@ def update_db(path ,table_name)  :
     curl = conn.cursor()
     #upload new data to db 
     df = pd.read_excel(path)
-    df.to_sql(name='PEOPLE',con=conn,if_exists='replace',index=False)
+    df.to_sql(name=table_name,con=conn,if_exists='replace',index=False)
+    conn.commit()
     curl.execute(f"SELECT Count(*) FROM {table_name}" )
     numberOfRows = curl.fetchone()[0]
     conn.commit()
@@ -158,9 +173,9 @@ def Find_prize_slice(table_name , count_winner ) :
     conn = sqlite3.connect("sql.db")
     curl = conn.cursor()
     curl.execute("SELECT Count() FROM %s" % table_name )
+    numberOfRows = curl.fetchone()[0]
     conn.commit()
     conn.close()
-    numberOfRows = curl.fetchone()[0]
     prize_slice = numberOfRows /  count_winner
     prize_slice = int(prize_slice)
     return (numberOfRows, prize_slice)
@@ -171,7 +186,6 @@ def find_winner_from_db(table_name , id) :
     conn = sqlite3.connect("sql.db")
     curl = conn.cursor()
     rowsQuery = f"SELECT * FROM {table_name} where ROW='{id}'"
-    print(rowsQuery)
     curl.execute(rowsQuery)
     rows = curl.fetchall()
     conn.commit()
@@ -184,12 +198,17 @@ def find_winner_from_db(table_name , id) :
 def Find_winner_id( table_name, numberOfRows , prize_slice ,winner_id ):
     """this function find winner id and  return it  """
     range_win = int(numberOfRows / prize_slice ) 
-    winners_list = []
+    winners_dict = {}
     start = 0 
     for winer  in range(range_win):
         id =  start + winner_id 
         winner_name , winer_phone = find_winner_from_db(table_name , id) 
-        print("winner_name , winer_phone")
+        start += prize_slice
+        winner_dict = {"winer index" : winer , "winner_name"  :  winner_name  , "winer_phone" : winer_phone }
+        winners_dict[winer] = winner_dict
+    return (winners_dict)
+    
+
 
 
 

@@ -144,7 +144,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef root():\n    return render_template(\"index.html\")\n# somewhere to login\n@app.route(\"/login\", methods=[\"GET\", \"POST\"])",
+        "peekOfCode": "def allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef root():\n    df = pd.DataFrame()\n    numberOfRows, prize_slice  = \" \" , \" \" \n    if request.method == 'POST':",
         "detail": "app",
         "documentation": {}
     },
@@ -153,7 +153,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def root():\n    return render_template(\"index.html\")\n# somewhere to login\n@app.route(\"/login\", methods=[\"GET\", \"POST\"])\ndef login():\n    if request.method == 'POST':\n        username = request.form['username']\n        password = request.form['password']        \n        if username == \"sobhan\" and password == \"1234\" :\n            login_user(user)",
+        "peekOfCode": "def root():\n    df = pd.DataFrame()\n    numberOfRows, prize_slice  = \" \" , \" \" \n    if request.method == 'POST':\n        try : \n            table_name = request.form.get('table_name')\n            count_winner =  int(request.form.get('count_winner'))\n            numberOfRows , prize_slice = Find_prize_slice(table_name , count_winner )\n            winner_id = int(request.form.get('winner_id'))\n            winners_dict = Find_winner_id( table_name , numberOfRows , prize_slice ,winner_id )",
         "detail": "app",
         "documentation": {}
     },
@@ -225,7 +225,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    #upload new data to db \n    df = pd.read_excel(path)\n    df.to_sql(name='PEOPLE',con=conn,if_exists='replace',index=False)\n    curl.execute(f\"SELECT Count(*) FROM {table_name}\" )\n    numberOfRows = curl.fetchone()[0]\n    conn.commit()",
+        "peekOfCode": "def update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    #upload new data to db \n    df = pd.read_excel(path)\n    df.to_sql(name=table_name,con=conn,if_exists='replace',index=False)\n    conn.commit()\n    curl.execute(f\"SELECT Count(*) FROM {table_name}\" )\n    numberOfRows = curl.fetchone()[0]",
         "detail": "app",
         "documentation": {}
     },
@@ -234,7 +234,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def Find_prize_slice(table_name , count_winner ) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    curl.execute(\"SELECT Count() FROM %s\" % table_name )\n    conn.commit()\n    conn.close()\n    numberOfRows = curl.fetchone()[0]\n    prize_slice = numberOfRows /  count_winner\n    prize_slice = int(prize_slice)",
+        "peekOfCode": "def Find_prize_slice(table_name , count_winner ) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    curl.execute(\"SELECT Count() FROM %s\" % table_name )\n    numberOfRows = curl.fetchone()[0]\n    conn.commit()\n    conn.close()\n    prize_slice = numberOfRows /  count_winner\n    prize_slice = int(prize_slice)",
         "detail": "app",
         "documentation": {}
     },
@@ -243,7 +243,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def find_winner_from_db(table_name , id) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    rowsQuery = f\"SELECT * FROM {table_name} where ROW='{id}'\"\n    print(rowsQuery)\n    curl.execute(rowsQuery)\n    rows = curl.fetchall()\n    conn.commit()\n    conn.close()",
+        "peekOfCode": "def find_winner_from_db(table_name , id) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    rowsQuery = f\"SELECT * FROM {table_name} where ROW='{id}'\"\n    curl.execute(rowsQuery)\n    rows = curl.fetchall()\n    conn.commit()\n    conn.close()\n    winner_name , winer_phone = rows[0][1] , rows[0][2]",
         "detail": "app",
         "documentation": {}
     },
@@ -252,7 +252,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def Find_winner_id( table_name, numberOfRows , prize_slice ,winner_id ):\n    \"\"\"this function find winner id and  return it  \"\"\"\n    range_win = int(numberOfRows / prize_slice ) \n    winners_list = []\n    start = 0 \n    for winer  in range(range_win):\n        id =  start + winner_id \n        winner_name , winer_phone = find_winner_from_db(table_name , id) \n        print(\"winner_name , winer_phone\")\nif __name__ ==  \"__main__\":",
+        "peekOfCode": "def Find_winner_id( table_name, numberOfRows , prize_slice ,winner_id ):\n    \"\"\"this function find winner id and  return it  \"\"\"\n    range_win = int(numberOfRows / prize_slice ) \n    winners_dict = {}\n    start = 0 \n    for winer  in range(range_win):\n        id =  start + winner_id \n        winner_name , winer_phone = find_winner_from_db(table_name , id) \n        start += prize_slice\n        winner_dict = {\"winer index\" : winer , \"winner_name\"  :  winner_name  , \"winer_phone\" : winer_phone }",
         "detail": "app",
         "documentation": {}
     },
@@ -315,7 +315,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "user = User(0)\ndef allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef root():\n    return render_template(\"index.html\")\n# somewhere to login",
+        "peekOfCode": "user = User(0)\ndef allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef root():\n    df = pd.DataFrame()\n    numberOfRows, prize_slice  = \" \" , \" \" ",
         "detail": "app",
         "documentation": {}
     }

@@ -11195,6 +11195,9 @@ body {
   padding-right: 1rem;
 }
 
+
+
+
 .datatable-sorter::before,
 .datatable-sorter::after {
   content: "";
