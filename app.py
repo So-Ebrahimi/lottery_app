@@ -168,17 +168,17 @@ def logout():
 
 # handle login failed
 @app.errorhandler(401)
-def page_not_found(e):
+def error(e):
     return render_template("401.html")
 
 # handle 404 error
 @app.errorhandler(404)
-def page_not_found(e):
+def error(e):
     return render_template("404.html")
 
 # handle 500 error
 @app.errorhandler(500)
-def page_not_found(e):
+def error(e):
     return render_template("500.html")
 
 # callback to reload the user object        

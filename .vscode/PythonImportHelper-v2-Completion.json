@@ -201,34 +201,34 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def logout():\n    logout_user()\n    return Response('<p>Logged out</p>')\n# handle login failed\n@app.errorhandler(401)\ndef page_not_found(e):\n    return render_template(\"401.html\")\n# handle 404 error\n@app.errorhandler(404)\ndef page_not_found(e):",
+        "peekOfCode": "def logout():\n    logout_user()\n    return Response('<p>Logged out</p>')\n# handle login failed\n@app.errorhandler(401)\ndef error(e):\n    return render_template(\"401.html\")\n# handle 404 error\n@app.errorhandler(404)\ndef error(e):",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "page_not_found",
+        "label": "error",
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def page_not_found(e):\n    return render_template(\"401.html\")\n# handle 404 error\n@app.errorhandler(404)\ndef page_not_found(e):\n    return render_template(\"404.html\")\n# handle 500 error\n@app.errorhandler(500)\ndef page_not_found(e):\n    return render_template(\"500.html\")",
+        "peekOfCode": "def error(e):\n    return render_template(\"401.html\")\n# handle 404 error\n@app.errorhandler(404)\ndef error(e):\n    return render_template(\"404.html\")\n# handle 500 error\n@app.errorhandler(500)\ndef error(e):\n    return render_template(\"500.html\")",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "page_not_found",
+        "label": "error",
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def page_not_found(e):\n    return render_template(\"404.html\")\n# handle 500 error\n@app.errorhandler(500)\ndef page_not_found(e):\n    return render_template(\"500.html\")\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)",
+        "peekOfCode": "def error(e):\n    return render_template(\"404.html\")\n# handle 500 error\n@app.errorhandler(500)\ndef error(e):\n    return render_template(\"500.html\")\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "page_not_found",
+        "label": "error",
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def page_not_found(e):\n    return render_template(\"500.html\")\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"0.0.0.0\", port=\"12345\",debug=True)",
+        "peekOfCode": "def error(e):\n    return render_template(\"500.html\")\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"0.0.0.0\", port=\"12345\",debug=True)",
         "detail": "app",
         "documentation": {}
     },
