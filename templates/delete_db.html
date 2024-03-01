@@ -39,17 +39,22 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="/">
+                            <a class="nav-link" href="/home">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 home
                             </a>
-                            <a class="nav-link" href="/database">
+                            <div class="sb-sidenav-menu-heading">DATABASE</div>
+                            <a class="nav-link" href="/veiw_db">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                veiw Database  
+                                Veiw   
                             </a>
-                            <a class="nav-link" href="/updatedb">
+                            <a class="nav-link" href="/upload_db">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Update Database
+                                Upload 
+                            </a>
+                            <a class="nav-link" href="/delete_db">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Delete 
                             </a>
                         </div>
                     </div>
@@ -62,50 +67,26 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">DATABASE VIEW</h1>
+                        <h1 class="mt-4">DELETE TABLE</h1>
                         <div class="card mb-4">
                             <div class="card-body">
                                 <form method=post enctype=multipart/form-data>
                                     <select class="form-select" aria-label="Default select example"  name="table_name">
                                         <option selected>select table name </option>
-                                        <option value="PEOPLE">PEOPLE</option>
-                                        <option value="two">Two</option>
-                                        <option value="three">Three</option>
+                                        {% for o in tables_names %}
+                                        <option value={{o}}>{{o}}</option>
+                                        {% endfor %} 
                                     </select>
-                                    <input type=submit >
+                                    <div class="card-body">
+                                        <input type=submit >
+                                    </div>
                                 </form>
+                                
                             </div>
                         </div>
-                        <div class="card mb-4">
                             <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                DataTable Example
+                                {{Message}}
                             </div>
-                                <div class="card-body">
-                                    <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                        {% for col in column_names %}
-                                        <th>
-                                        
-                                            {{col}}
-                                        
-                                        </th>
-                                        {% endfor %}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for row in row_data %}
-                                        <tr>
-                                        {% for col, row_ in zip(column_names, row) %}
-                                        <td>{{row_}}</td>
-                                        {% endfor %}
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">

@@ -1,12 +1,11 @@
 from datetime import  datetime
 import os
 from werkzeug.utils import secure_filename
-from flask import Flask , Response, redirect, url_for, request, session, abort , flash , render_template
+from flask import Flask , Response, redirect, url_for, request, session, abort , flash , render_template ,send_file
 from flask_login import LoginManager, UserMixin, \
                                 login_required, login_user, logout_user 
 import pandas as pd 
-import sqlite3
-
+from  db  import *
 #init
 app = Flask(__name__)
 
@@ -46,25 +45,27 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # some protected url
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/home', methods=['GET', 'POST'])
 @login_required
 def root():
     '''home direct aff lottery web app '''
+    tables_name = find_tables_name()
     df = pd.DataFrame()
     count_winner, numberOfRows, prize_slice  = "###" , "###" ,"###"
     if request.method == 'POST':
         try : 
-            table_name = request.form.get('table_name')
+            table = request.form.get('table_name')
             count_winner =  int(request.form.get('count_winner'))
-            numberOfRows , prize_slice = Find_prize_slice(table_name , count_winner )
+            numberOfRows , prize_slice = Find_prize_slice(table , count_winner )
             winner_id = int(request.form.get('winner_id'))
-            winners_dict = Find_winner_id( table_name , numberOfRows , prize_slice ,winner_id )
+            winners_dict = Find_winner_id( table , numberOfRows , prize_slice ,winner_id )
             df = pd.DataFrame(winners_dict) 
             df = df.T
-            df.to_excel("backup_winners/" + table_name + "_" + str(datetime.now().strftime("%Y-%m-%d %H_%M_%S"))+".xlsx")
+            df.to_excel("backup_winners/" + table + "_" + str(datetime.now().strftime("%Y-%m-%d %H_%M_%S"))+".xlsx")
+            df.to_excel("output.xlsx")
         except :
             pass            
-    return render_template("base_lottery.html" , count_winner=count_winner ,  numberOfRows=numberOfRows  , prize_slice=prize_slice ,
+    return render_template("home.html" , count_winner=count_winner ,  numberOfRows=numberOfRows  , prize_slice=prize_slice , tables_name = tables_name,
                                         column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
 
 # somewhere to login
@@ -76,26 +77,27 @@ def login():
         password = request.form['password']        
         if username == correct_username and password == correct_password :
             login_user(user)
-            return redirect("/")
+            return redirect("/home")
         else:
             return abort(401)
     else:
         return render_template("login.html")
 
-@app.route('/database', methods=['GET', 'POST'])
+@app.route('/veiw_db', methods=['GET', 'POST'])
 @login_required
 def db()  :
     "view database tables"
     df = pd.DataFrame()
+    tables_name = find_tables_name()
     if request.method == 'POST':
         try :
             table_name = request.form.get('table_name')
             df = table_view_of_db(table_name)
         except :
             return("error")
-    return render_template("tables_db.html",column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
+    return render_template("view_db.html",column_names=df.columns.values,tables_name = tables_name,  row_data=list(df.values.tolist()), zip=zip)
 
-@app.route("/updatedb" ,  methods=['GET', 'POST'])
+@app.route("/upload_db" ,  methods=['GET', 'POST'])
 @login_required
 def upload_file():
     '''update database table '''
@@ -119,10 +121,33 @@ def upload_file():
             numberOfRows = update_db(file_path, table_name)
             session['info'] = f'imported {numberOfRows} people ' 
             os.remove(file_path)
-            return redirect("/updatedb")
+            return redirect("/upload_db")
     info = session.get("info" , "")
     session['info'] =  ''
     return render_template("update_db.html",info=info)
+
+@app.route('/delete_db', methods=['GET', 'POST'])
+@login_required
+def delete_t()  :
+    "delete database tables"
+    Message =""
+    tables_names = find_tables_name()
+    if request.method == 'POST':
+        table_name = request.form.get('table_name')
+        Message = delete_table(table_name)
+    return render_template("delete_db.html", Message=Message ,tables_names = tables_names)
+
+@app.route('/download', methods=['GET'])
+def download_result():
+    # File name
+    file_name = "output.xlsx"
+
+    # Send the file as a response
+    try:
+        return send_file(file_name, as_attachment=True)
+    except Exception as e:
+        return str(e)
+
 
 # somewhere to logout
 @app.route("/logout")
@@ -151,67 +176,6 @@ def page_not_found(e):
 def load_user(userid):
     return User(userid)
 
-def table_view_of_db(table_name) :
-        '''this function  findshow all of the memeber of db  '''
-        con = sqlite3.connect("sql.db")
-        sql_query = pd.read_sql(f"SELECT * FROM {table_name}", con)
-        df = pd.DataFrame(sql_query)
-        con.commit()
-        con.close()
-        return (df)
-
-def update_db(path ,table_name)  :
-    """update database from xlsx file  """
-    conn = sqlite3.connect("sql.db")
-    curl = conn.cursor()
-    #upload new data to db 
-    df = pd.read_excel(path)
-    df.to_sql(name=table_name,con=conn,if_exists='replace',index=False)
-    conn.commit()
-    curl.execute(f"SELECT Count(*) FROM {table_name}" )
-    numberOfRows = curl.fetchone()[0]
-    conn.commit()
-    conn.close()
-    print("Db  updated suxcesfully")
-    return (numberOfRows)
-
-def Find_prize_slice(table_name , count_winner ) :
-    '''this function  find winner by count of prize in table '''
-    conn = sqlite3.connect("sql.db")
-    curl = conn.cursor()
-    curl.execute("SELECT Count() FROM %s" % table_name )
-    numberOfRows = curl.fetchone()[0]
-    conn.commit()
-    conn.close()
-    prize_slice = numberOfRows /  count_winner
-    prize_slice = int(prize_slice)
-    return (numberOfRows, prize_slice)
-
-def find_winner_from_db(table_name , id) :
-    '''this function  find winner by count of prize in table '''
-    conn = sqlite3.connect("sql.db")
-    curl = conn.cursor()
-    rowsQuery = f"SELECT * FROM {table_name} where ROW='{id}'"
-    curl.execute(rowsQuery)
-    rows = curl.fetchall()
-    conn.commit()
-    conn.close()
-    winner_name , winer_phone = rows[0][1] , rows[0][2]
-    return (winner_name , winer_phone)
-
-def Find_winner_id( table_name, numberOfRows , prize_slice ,winner_id ):
-    """this function find winner id and  return it  """
-    range_win = int(numberOfRows / prize_slice ) 
-    winners_dict = {}
-    start = 0 
-    for winer  in range(range_win):
-        id =  start + winner_id 
-        winner_name , winer_phone = find_winner_from_db(table_name , id) 
-        start += prize_slice
-        winner_dict = {"winer index" : winer , "winner_name"  :  winner_name  , "winer_phone" : winer_phone }
-        winners_dict[winer] = winner_dict
-    return (winners_dict)
-    
 
 if __name__ ==  "__main__":
     app.run(host="0.0.0.0", port="12345",debug=True)

@@ -39,17 +39,22 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="/">
+                            <a class="nav-link" href="/home">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Home
                             </a>
-                            <a class="nav-link" href="/database">
+                            <div class="sb-sidenav-menu-heading">DATABASE</div>
+                            <a class="nav-link" href="/veiw_db">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                veiw Database  
+                                Veiw   
                             </a>
-                            <a class="nav-link" href="/updatedb">
+                            <a class="nav-link" href="/upload_db">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Update Database
+                                Upload
+                            </a>
+                            <a class="nav-link" href="/delete_db">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Delete 
                             </a>
                         </div>
                     </div>
@@ -66,19 +71,25 @@
                         <div class="card mb-4">
                             <div class="card-body">
                                 <form method=post enctype=multipart/form-data>
-                                    <div class="col">
-                                        <select class="form-select" aria-label="Default select example"  name="table_name">
-                                            <option selected>select table name </option>
-                                            <option value="PEOPLE">PEOPLE</option>
-                                            <option value="two">Two</option>
-                                            <option value="three">Three</option>
-                                        </select>
-                                    </div>
+                                    <div class="row">
+                                        <div class="card-body">
+                                            <select class="form-select" aria-label="Default select example"  name="table_name">
+                                                <option selected>select table name </option>
+                                                {% for o in tables_name %}
+                                                <option value={{o}}>{{o}}</option>
+                                                {% endfor %} 
+                                            </select>
+                                        </div>
                                     <div class="col">
                                         <input class="form-control py-4" id="count_winner" type="number" placeholder="Enter count_winner" name="count_winner"/>
+                                    </div>
+                                    <div class="col">
                                         <input class="form-control py-4" id="winner_id" type="number" placeholder="Enter winner_id" name="winner_id"/>
                                     </div>
+                                </div>
+                                <div class="card-body">
                                     <input type=submit >
+                                </div>    
                                 </form>
                             </div>
                         </div>
@@ -101,7 +112,7 @@
                             </div>
                             <div class="col">
                                 <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">slice  1  to </div>
+                                    <div class="card-body">slice</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <p class="small text-white stretched-link" >  1  to {{prize_slice}}</p>
                                     </div>
@@ -135,15 +146,19 @@
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
+                                        </div>
                                         </table>
-                                    </div>
+                                        <div  style="padding-right:180px;">
+                                            <a href="/download"  id="download_output_button" class="btn btn-info">Download File</a>
+                                        </div>
                             </div>
                         </div>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
-                            </div>
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
                         </div>
                     </div>
                 </footer>

@@ -46,7 +46,7 @@
                             <div class="sb-sidenav-menu-heading">DATABASE</div>
                             <a class="nav-link" href="/veiw_db">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                View   
+                                Veiw   
                             </a>
                             <a class="nav-link" href="/upload_db">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
@@ -67,30 +67,51 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">UPLOAD FILE</h1>
-
+                        <h1 class="mt-4">DATABASE VIEW</h1>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <form method=post enctype=multipart/form-data>
+                                    <select class="form-select" aria-label="Default select example"  name="table_name">
+                                        <option selected>select table name </option>
+                                        {% for o in tables_name %}
+                                        <option value={{o}}>{{o}}</option>
+                                        {% endfor %} 
+                                    </select>
+                                    <div class="card-body">
+                                        <input type=submit >
+                                    </div>
+                                </form>
+                                
+                            </div>
+                        </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                update database 
+                                DataTable
                             </div>
-                            <div class="card-body">
                                 <div class="card-body">
-                                    <form method=post enctype=multipart/form-data>
-                                        <div class="row">
-                                            <div class="col">
-                                                <input type="text" class="form-control" placeholder="Enter Table name" name="table_name">
-                                            </div>
-                                            <div class="col">
-                                                <input type=file name=file>
-                                                <input type=submit value=Upload>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div>
-                                    <h3 class="mt-4">{{info}}</h3>
-                                </div>
+                                    <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                        {% for col in column_names %}   tables_name
+                                        <th>
+                                        
+                                            {{col}}
+                                        
+                                        </th>
+                                        {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in row_data %}
+                                        <tr>
+                                        {% for col, row_ in zip(column_names, row) %}
+                                        <td>{{row_}}</td>
+                                        {% endfor %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
