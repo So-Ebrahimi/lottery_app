@@ -41,42 +41,16 @@
                             <div class="sb-sidenav-menu-heading">Core</div>
                             <a class="nav-link" href="/">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                base
+                                Home
                             </a>
                             <a class="nav-link" href="/database">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Database  
+                                veiw Database  
                             </a>
                             <a class="nav-link" href="/updatedb">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Update Database
                             </a>
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        Authentication
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.html">Login</a>
-                                            <a class="nav-link" href="register.html">Register</a>
-                                            <a class="nav-link" href="password.html">Forgot Password</a>
-                                        </nav>
-                                    </div>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                        Error
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="401.html">401 Page</a>
-                                            <a class="nav-link" href="404.html">404 Page</a>
-                                            <a class="nav-link" href="500.html">500 Page</a>
-                                        </nav>
-                                    </div>
-                                </nav>
-                            </div>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
@@ -88,43 +62,59 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">CORE</h1>
+                        <h1 class="mt-4">HOME</h1>
                         <div class="card mb-4">
                             <div class="card-body">
                                 <form method=post enctype=multipart/form-data>
-                                    <select class="form-select" aria-label="Default select example"  name="table_name">
-                                        <option selected>select table name </option>
-                                        <option value="PEOPLE">PEOPLE</option>
-                                        <option value="two">Two</option>
-                                        <option value="three">Three</option>
-                                    </select>
+                                    <div class="col">
+                                        <select class="form-select" aria-label="Default select example"  name="table_name">
+                                            <option selected>select table name </option>
+                                            <option value="PEOPLE">PEOPLE</option>
+                                            <option value="two">Two</option>
+                                            <option value="three">Three</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
                                         <input class="form-control py-4" id="count_winner" type="number" placeholder="Enter count_winner" name="count_winner"/>
                                         <input class="form-control py-4" id="winner_id" type="number" placeholder="Enter winner_id" name="winner_id"/>
+                                    </div>
                                     <input type=submit >
                                 </form>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col">
                                 <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">{{numberOfRows}}</div>
+                                    <div class="card-body">total</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <p class="small text-white stretched-link">total </p>
+                                        <p class="small text-white stretched-link">{{numberOfRows}}</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">{{prize_slice}}</div>
+                            <div class="col">
+                                <div class="card bg-success text-white mb-4">
+                                    <div class="card-body">count winner </div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <p class="small text-white stretched-link" >slice</p>
+                                        <p class="small text-white stretched-link" >{{count_winner}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card bg-warning text-white mb-4">
+                                    <div class="card-body">slice  1  to </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <p class="small text-white stretched-link" >  1  to {{prize_slice}}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                            <div class="col-xl-6">
-                                    <div class="card-body">
-                                        <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                winners list
+                            </div>
+                                <div class="card-body">
+                                    <table id="datatablesSimple">
                                             <thead>
                                                 <tr>
                                                 {% for col in column_names %}

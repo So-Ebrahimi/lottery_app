@@ -1,5 +1,13 @@
 [
     {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "os",
         "kind": 6,
         "isExtraImport": true,
@@ -135,7 +143,7 @@
         "kind": 6,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "class User(UserMixin):\n    def __init__(self, id):\n        self.id = id\n    def __repr__(self):\n        return \"%d\" % (self.id)\n# create some users with ids 1 to 20       \nuser = User(0)\ndef allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS",
+        "peekOfCode": "class User(UserMixin):\n    \"\"\" A minimal and singleton user class used only for administrative tasks \"\"\"\n    def __init__(self, id):\n        self.id = id\n    def __repr__(self):\n        return \"%d\" % (self.id)\n# create some users with ids 1 to 20       \nuser = User(0)\ndef allowed_file(filename):\n    \"\"\" checks the extension of the passed filename to be in the allowed extensions\"\"\"",
         "detail": "app",
         "documentation": {}
     },
@@ -144,7 +152,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef root():\n    df = pd.DataFrame()\n    numberOfRows, prize_slice  = \" \" , \" \" \n    if request.method == 'POST':",
+        "peekOfCode": "def allowed_file(filename):\n    \"\"\" checks the extension of the passed filename to be in the allowed extensions\"\"\"\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef root():\n    '''home direct aff lottery web app '''\n    df = pd.DataFrame()",
         "detail": "app",
         "documentation": {}
     },
@@ -153,7 +161,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def root():\n    df = pd.DataFrame()\n    numberOfRows, prize_slice  = \" \" , \" \" \n    if request.method == 'POST':\n        try : \n            table_name = request.form.get('table_name')\n            count_winner =  int(request.form.get('count_winner'))\n            numberOfRows , prize_slice = Find_prize_slice(table_name , count_winner )\n            winner_id = int(request.form.get('winner_id'))\n            winners_dict = Find_winner_id( table_name , numberOfRows , prize_slice ,winner_id )",
+        "peekOfCode": "def root():\n    '''home direct aff lottery web app '''\n    df = pd.DataFrame()\n    count_winner, numberOfRows, prize_slice  = \"###\" , \"###\" ,\"###\"\n    if request.method == 'POST':\n        try : \n            table_name = request.form.get('table_name')\n            count_winner =  int(request.form.get('count_winner'))\n            numberOfRows , prize_slice = Find_prize_slice(table_name , count_winner )\n            winner_id = int(request.form.get('winner_id'))",
         "detail": "app",
         "documentation": {}
     },
@@ -162,7 +170,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def login():\n    if request.method == 'POST':\n        username = request.form['username']\n        password = request.form['password']        \n        if username == \"sobhan\" and password == \"1234\" :\n            login_user(user)\n            return redirect(\"/\")\n        else:\n            return abort(401)\n    else:",
+        "peekOfCode": "def login():\n    \"\"\" user login: only for admin user (system has no other user than admin)\"\"\"\n    if request.method == 'POST':\n        username = request.form['username']\n        password = request.form['password']        \n        if username == correct_username and password == correct_password :\n            login_user(user)\n            return redirect(\"/\")\n        else:\n            return abort(401)",
         "detail": "app",
         "documentation": {}
     },
@@ -171,7 +179,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def db()  :\n    df = table_view_of_db(\"PEOPLE\")\n    if request.method == 'POST':\n        try :\n            table_name = request.form.get('table_name')\n            df = table_view_of_db(table_name)\n        except :\n            return(\"error\")\n    return render_template(\"tables_db.html\",column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)\n@app.route(\"/updatedb\" ,  methods=['GET', 'POST'])",
+        "peekOfCode": "def db()  :\n    \"view database tables\"\n    df = pd.DataFrame()\n    if request.method == 'POST':\n        try :\n            table_name = request.form.get('table_name')\n            df = table_view_of_db(table_name)\n        except :\n            return(\"error\")\n    return render_template(\"tables_db.html\",column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)",
         "detail": "app",
         "documentation": {}
     },
@@ -180,7 +188,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def upload_file():\n    if request.method == 'POST':\n        # check if the post request has the file part\n        if 'file' not in request.files:\n            flash('No file part')\n            session['info'] = 'No file part'\n            return redirect(request.url)\n        file = request.files['file']\n        table_name = request.form.get('table_name')\n        # If the user does not select a file, the browser submits an",
+        "peekOfCode": "def upload_file():\n    '''update database table '''\n    if request.method == 'POST':\n        # check if the post request has the file part\n        if 'file' not in request.files:\n            flash('No file part')\n            session['info'] = 'No file part'\n            return redirect(request.url)\n        file = request.files['file']\n        table_name = request.form.get('table_name')",
         "detail": "app",
         "documentation": {}
     },
@@ -189,7 +197,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def logout():\n    logout_user()\n    return Response('<p>Logged out</p>')\n# handle login failed\n@app.errorhandler(401)\ndef page_not_found(e):\n    return Response('<p>Login failed</p>')\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):",
+        "peekOfCode": "def logout():\n    logout_user()\n    return Response('<p>Logged out</p>')\n# handle login failed\n@app.errorhandler(401)\ndef page_not_found(e):\n    return render_template(\"401.html\")\n# handle 404 error\n@app.errorhandler(404)\ndef page_not_found(e):",
         "detail": "app",
         "documentation": {}
     },
@@ -198,7 +206,25 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def page_not_found(e):\n    return Response('<p>Login failed</p>')\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)\ndef table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(\"sql.db\")\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)",
+        "peekOfCode": "def page_not_found(e):\n    return render_template(\"401.html\")\n# handle 404 error\n@app.errorhandler(404)\ndef page_not_found(e):\n    return render_template(\"404.html\")\n# handle 500 error\n@app.errorhandler(500)\ndef page_not_found(e):\n    return render_template(\"500.html\")",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "page_not_found",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def page_not_found(e):\n    return render_template(\"404.html\")\n# handle 500 error\n@app.errorhandler(500)\ndef page_not_found(e):\n    return render_template(\"500.html\")\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "page_not_found",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def page_not_found(e):\n    return render_template(\"500.html\")\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)\ndef table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(\"sql.db\")\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)",
         "detail": "app",
         "documentation": {}
     },
@@ -261,7 +287,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "app = Flask(__name__)\nUPLOAD_FOLDER = ''\nALLOWED_EXTENSIONS = {'xlsx'}\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n# config\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()",
+        "peekOfCode": "app = Flask(__name__)\n#local variable \nUPLOAD_FOLDER = ''\nALLOWED_EXTENSIONS = {'xlsx'}\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n#USERNAME & PASSWORD\ncorrect_username = \"sobhan\"\ncorrect_password = \"1234\"\n# config SECRET_KEY\napp.config.update(",
         "detail": "app",
         "documentation": {}
     },
@@ -270,7 +296,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "UPLOAD_FOLDER = ''\nALLOWED_EXTENSIONS = {'xlsx'}\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n# config\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()\nlogin_manager.init_app(app)",
+        "peekOfCode": "UPLOAD_FOLDER = ''\nALLOWED_EXTENSIONS = {'xlsx'}\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n#USERNAME & PASSWORD\ncorrect_username = \"sobhan\"\ncorrect_password = \"1234\"\n# config SECRET_KEY\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)",
         "detail": "app",
         "documentation": {}
     },
@@ -279,7 +305,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "ALLOWED_EXTENSIONS = {'xlsx'}\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n# config\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()\nlogin_manager.init_app(app)\nlogin_manager.login_view = \"login\"",
+        "peekOfCode": "ALLOWED_EXTENSIONS = {'xlsx'}\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n#USERNAME & PASSWORD\ncorrect_username = \"sobhan\"\ncorrect_password = \"1234\"\n# config SECRET_KEY\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login",
         "detail": "app",
         "documentation": {}
     },
@@ -288,7 +314,25 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n# config\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()\nlogin_manager.init_app(app)\nlogin_manager.login_view = \"login\"\nclass User(UserMixin):",
+        "peekOfCode": "app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n#USERNAME & PASSWORD\ncorrect_username = \"sobhan\"\ncorrect_password = \"1234\"\n# config SECRET_KEY\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "correct_username",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "correct_username = \"sobhan\"\ncorrect_password = \"1234\"\n# config SECRET_KEY\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()\nlogin_manager.init_app(app)\nlogin_manager.login_view = \"login\"",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "correct_password",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "correct_password = \"1234\"\n# config SECRET_KEY\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()\nlogin_manager.init_app(app)\nlogin_manager.login_view = \"login\"\nclass User(UserMixin):",
         "detail": "app",
         "documentation": {}
     },
@@ -297,7 +341,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "login_manager = LoginManager()\nlogin_manager.init_app(app)\nlogin_manager.login_view = \"login\"\nclass User(UserMixin):\n    def __init__(self, id):\n        self.id = id\n    def __repr__(self):\n        return \"%d\" % (self.id)\n# create some users with ids 1 to 20       \nuser = User(0)",
+        "peekOfCode": "login_manager = LoginManager()\nlogin_manager.init_app(app)\nlogin_manager.login_view = \"login\"\nclass User(UserMixin):\n    \"\"\" A minimal and singleton user class used only for administrative tasks \"\"\"\n    def __init__(self, id):\n        self.id = id\n    def __repr__(self):\n        return \"%d\" % (self.id)\n# create some users with ids 1 to 20       ",
         "detail": "app",
         "documentation": {}
     },
@@ -306,7 +350,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "login_manager.login_view = \"login\"\nclass User(UserMixin):\n    def __init__(self, id):\n        self.id = id\n    def __repr__(self):\n        return \"%d\" % (self.id)\n# create some users with ids 1 to 20       \nuser = User(0)\ndef allowed_file(filename):\n    return '.' in filename and \\",
+        "peekOfCode": "login_manager.login_view = \"login\"\nclass User(UserMixin):\n    \"\"\" A minimal and singleton user class used only for administrative tasks \"\"\"\n    def __init__(self, id):\n        self.id = id\n    def __repr__(self):\n        return \"%d\" % (self.id)\n# create some users with ids 1 to 20       \nuser = User(0)\ndef allowed_file(filename):",
         "detail": "app",
         "documentation": {}
     },
@@ -315,7 +359,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "user = User(0)\ndef allowed_file(filename):\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef root():\n    df = pd.DataFrame()\n    numberOfRows, prize_slice  = \" \" , \" \" ",
+        "peekOfCode": "user = User(0)\ndef allowed_file(filename):\n    \"\"\" checks the extension of the passed filename to be in the allowed extensions\"\"\"\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/', methods=['GET', 'POST'])\n@login_required\ndef root():\n    '''home direct aff lottery web app '''",
         "detail": "app",
         "documentation": {}
     }

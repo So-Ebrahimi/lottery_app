@@ -1,3 +1,4 @@
+from datetime import  datetime
 import os
 from werkzeug.utils import secure_filename
 from flask import Flask , Response, redirect, url_for, request, session, abort , flash , render_template
@@ -6,15 +7,19 @@ from flask_login import LoginManager, UserMixin, \
 import pandas as pd 
 import sqlite3
 
-
-
+#init
 app = Flask(__name__)
 
+#local variable 
 UPLOAD_FOLDER = ''
 ALLOWED_EXTENSIONS = {'xlsx'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# config
+#USERNAME & PASSWORD
+correct_username = "sobhan"
+correct_password = "1234"
+
+# config SECRET_KEY
 app.config.update(
     SECRET_KEY = 'secret_xxx'
 )
@@ -24,10 +29,8 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-
-
 class User(UserMixin):
-
+    """ A minimal and singleton user class used only for administrative tasks """
     def __init__(self, id):
         self.id = id
         
@@ -37,21 +40,18 @@ class User(UserMixin):
 # create some users with ids 1 to 20       
 user = User(0)
 
-
-
 def allowed_file(filename):
+    """ checks the extension of the passed filename to be in the allowed extensions"""
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
 
 # some protected url
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def root():
+    '''home direct aff lottery web app '''
     df = pd.DataFrame()
-    numberOfRows, prize_slice  = " " , " " 
-    
+    count_winner, numberOfRows, prize_slice  = "###" , "###" ,"###"
     if request.method == 'POST':
         try : 
             table_name = request.form.get('table_name')
@@ -61,19 +61,20 @@ def root():
             winners_dict = Find_winner_id( table_name , numberOfRows , prize_slice ,winner_id )
             df = pd.DataFrame(winners_dict) 
             df = df.T
+            df.to_excel("backup_winners/" + table_name + "_" + str(datetime.now().strftime("%Y-%m-%d %H_%M_%S"))+".xlsx")
         except :
             pass            
-    return render_template("base_lottery.html" , numberOfRows=numberOfRows  , prize_slice=prize_slice ,
+    return render_template("base_lottery.html" , count_winner=count_winner ,  numberOfRows=numberOfRows  , prize_slice=prize_slice ,
                                         column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
-    
 
 # somewhere to login
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """ user login: only for admin user (system has no other user than admin)"""
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']        
-        if username == "sobhan" and password == "1234" :
+        if username == correct_username and password == correct_password :
             login_user(user)
             return redirect("/")
         else:
@@ -81,11 +82,11 @@ def login():
     else:
         return render_template("login.html")
 
-
 @app.route('/database', methods=['GET', 'POST'])
 @login_required
 def db()  :
-    df = table_view_of_db("PEOPLE")
+    "view database tables"
+    df = pd.DataFrame()
     if request.method == 'POST':
         try :
             table_name = request.form.get('table_name')
@@ -97,6 +98,7 @@ def db()  :
 @app.route("/updatedb" ,  methods=['GET', 'POST'])
 @login_required
 def upload_file():
+    '''update database table '''
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -129,19 +131,25 @@ def logout():
     logout_user()
     return Response('<p>Logged out</p>')
 
-
 # handle login failed
 @app.errorhandler(401)
 def page_not_found(e):
-    return Response('<p>Login failed</p>')
-    
-    
+    return render_template("401.html")
+
+# handle 404 error
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html")
+
+# handle 500 error
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template("500.html")
+
 # callback to reload the user object        
 @login_manager.user_loader
 def load_user(userid):
     return User(userid)
-
-
 
 def table_view_of_db(table_name) :
         '''this function  findshow all of the memeber of db  '''
@@ -167,7 +175,6 @@ def update_db(path ,table_name)  :
     print("Db  updated suxcesfully")
     return (numberOfRows)
 
-
 def Find_prize_slice(table_name , count_winner ) :
     '''this function  find winner by count of prize in table '''
     conn = sqlite3.connect("sql.db")
@@ -180,7 +187,6 @@ def Find_prize_slice(table_name , count_winner ) :
     prize_slice = int(prize_slice)
     return (numberOfRows, prize_slice)
 
-
 def find_winner_from_db(table_name , id) :
     '''this function  find winner by count of prize in table '''
     conn = sqlite3.connect("sql.db")
@@ -192,8 +198,6 @@ def find_winner_from_db(table_name , id) :
     conn.close()
     winner_name , winer_phone = rows[0][1] , rows[0][2]
     return (winner_name , winer_phone)
-
-
 
 def Find_winner_id( table_name, numberOfRows , prize_slice ,winner_id ):
     """this function find winner id and  return it  """
@@ -208,9 +212,6 @@ def Find_winner_id( table_name, numberOfRows , prize_slice ,winner_id ):
         winners_dict[winer] = winner_dict
     return (winners_dict)
     
-
-
-
 
 if __name__ ==  "__main__":
     app.run(host="0.0.0.0", port="12345",debug=True)
