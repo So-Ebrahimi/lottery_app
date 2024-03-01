@@ -13,39 +13,39 @@ def table_view_of_db(table_name) :
 
 def update_db(path ,table_name ,re_ap )  :
     """update database from xlsx file  """
-    conn = sqlite3.connect(config.DATABASE_PATH)
-    curl = conn.cursor()
+    con = sqlite3.connect(config.DATABASE_PATH)
+    cur = con.cursor()
     #upload new data to db 
     df = pd.read_excel(path)
-    df.to_sql(name=table_name,con=conn,if_exists=re_ap ,index=False)
-    conn.commit()
-    curl.execute(f"SELECT Count(*) FROM {table_name}" )
-    numberOfRows = curl.fetchone()[0]
-    conn.commit()
-    conn.close()
+    df.to_sql(name=table_name,con=con,if_exists=re_ap ,index=False)
+    con.commit()
+    cur.execute(f"SELECT Count(*) FROM {table_name}" )
+    numberOfRows = cur.fetchone()[0]
+    con.commit()
+    con.close()
     return (numberOfRows)
 
 def Find_prize_slice(table_name , count_winner ) :
     '''this function  find winner by count of prize in table '''
-    conn = sqlite3.connect(config.DATABASE_PATH)
-    curl = conn.cursor()
-    curl.execute("SELECT Count() FROM %s" % table_name )
-    numberOfRows = curl.fetchone()[0]
-    conn.commit()
-    conn.close()
+    con = sqlite3.connect(config.DATABASE_PATH)
+    cur = con.cursor()
+    cur.execute("SELECT Count() FROM %s" % table_name )
+    numberOfRows = cur.fetchone()[0]
+    con.commit()
+    con.close()
     prize_slice = numberOfRows /  count_winner
     prize_slice = int(prize_slice)
     return (numberOfRows, prize_slice)
 
 def find_winner_from_db(table_name , id) :
     '''this function  find winner by count of prize in table '''
-    conn = sqlite3.connect(config.DATABASE_PATH)
-    curl = conn.cursor()
+    con = sqlite3.connect(config.DATABASE_PATH)
+    cur = con.cursor()
     rowsQuery = f"SELECT * FROM {table_name} where ROW='{id}'"
-    curl.execute(rowsQuery)
-    rows = curl.fetchall()
-    conn.commit()
-    conn.close()
+    cur.execute(rowsQuery)
+    rows = cur.fetchall()
+    con.commit()
+    con.close()
     winner_name , winer_phone = rows[0][1] , rows[0][2]
     return (winner_name , winer_phone)
 
@@ -65,13 +65,13 @@ def Find_winner_id( table_name, numberOfRows , prize_slice ,winner_id ):
 
 def find_tables_name():
     '''this function return db tables name '''
-    conn = sqlite3.connect(config.DATABASE_PATH)
-    curl = conn.cursor()
+    con = sqlite3.connect(config.DATABASE_PATH)
+    cur = con.cursor()
     Query = "SELECT name FROM sqlite_master WHERE type='table';"
-    curl.execute(Query)
-    tables_names  = curl.fetchall()
-    conn.commit()
-    conn.close()
+    cur.execute(Query)
+    tables_names  = cur.fetchall()
+    con.commit()
+    con.close()
     table_list  = []
     for table in tables_names :
         table_list.append(table[0])
@@ -81,9 +81,9 @@ def delete_table(table_name):
     try :
         '''this function  delete table from db   '''
         con = sqlite3.connect(config.DATABASE_PATH)
-        curl = con.cursor()
+        cur = con.cursor()
         sql_query = f"DROP TABLE {table_name} ;"
-        curl.execute(sql_query)
+        cur.execute(sql_query)
         con.commit()
         con.close()
         Message = "data deleted  successfully"

@@ -100,12 +100,13 @@ def db()  :
             df = table_view_of_db(table_name)
         except :
             return("error")
-    return render_template("view_db.html",column_names=df.columns.values,tables_name = tables_name,  row_data=list(df.values.tolist()), zip=zip)
+    return render_template("view_db.html",column_names=df.columns.values
+                        ,tables_name = tables_name,  row_data=list(df.values.tolist()), zip=zip)
 
 @app.route("/upload_db" ,  methods=['GET', 'POST'])
 @login_required
 def upload_file():
-    '''update database table '''
+    '''update & upload new data to  database  '''
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -114,6 +115,7 @@ def upload_file():
             return redirect(request.url)
         file = request.files['file']
         table_name = request.form.get('table_name')
+        re_ap = request.form.get('re_ap')
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
@@ -123,8 +125,11 @@ def upload_file():
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
-            numberOfRows = update_db(file_path, table_name)
-            session['info'] = f'imported {numberOfRows} people ' 
+            try :
+                numberOfRows = update_db(file_path , table_name , re_ap)
+                session['info'] = f'imported {numberOfRows} row  '
+            except :
+                session['info'] = 'Error with db '
             os.remove(file_path)
             return redirect("/upload_db")
     info = session.get("info" , "")

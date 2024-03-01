@@ -174,7 +174,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def upload_file():\n    '''update database table '''\n    if request.method == 'POST':\n        # check if the post request has the file part\n        if 'file' not in request.files:\n            flash('No file part')\n            session['info'] = 'No file part'\n            return redirect(request.url)\n        file = request.files['file']\n        table_name = request.form.get('table_name')",
+        "peekOfCode": "def upload_file():\n    '''update & upload new data to  database  '''\n    if request.method == 'POST':\n        # check if the post request has the file part\n        if 'file' not in request.files:\n            flash('No file part')\n            session['info'] = 'No file part'\n            return redirect(request.url)\n        file = request.files['file']\n        table_name = request.form.get('table_name')",
         "detail": "app",
         "documentation": {}
     },
@@ -354,7 +354,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def update_db(path ,table_name ,re_ap )  :\n    \"\"\"update database from xlsx file  \"\"\"\n    conn = sqlite3.connect(config.DATABASE_PATH)\n    curl = conn.cursor()\n    #upload new data to db \n    df = pd.read_excel(path)\n    df.to_sql(name=table_name,con=conn,if_exists=re_ap ,index=False)\n    conn.commit()\n    curl.execute(f\"SELECT Count(*) FROM {table_name}\" )\n    numberOfRows = curl.fetchone()[0]",
+        "peekOfCode": "def update_db(path ,table_name ,re_ap )  :\n    \"\"\"update database from xlsx file  \"\"\"\n    con = sqlite3.connect(config.DATABASE_PATH)\n    cur = con.cursor()\n    #upload new data to db \n    df = pd.read_excel(path)\n    df.to_sql(name=table_name,con=con,if_exists=re_ap ,index=False)\n    con.commit()\n    cur.execute(f\"SELECT Count(*) FROM {table_name}\" )\n    numberOfRows = cur.fetchone()[0]",
         "detail": "db",
         "documentation": {}
     },
@@ -363,7 +363,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def Find_prize_slice(table_name , count_winner ) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(config.DATABASE_PATH)\n    curl = conn.cursor()\n    curl.execute(\"SELECT Count() FROM %s\" % table_name )\n    numberOfRows = curl.fetchone()[0]\n    conn.commit()\n    conn.close()\n    prize_slice = numberOfRows /  count_winner\n    prize_slice = int(prize_slice)",
+        "peekOfCode": "def Find_prize_slice(table_name , count_winner ) :\n    '''this function  find winner by count of prize in table '''\n    con = sqlite3.connect(config.DATABASE_PATH)\n    cur = con.cursor()\n    cur.execute(\"SELECT Count() FROM %s\" % table_name )\n    numberOfRows = cur.fetchone()[0]\n    con.commit()\n    con.close()\n    prize_slice = numberOfRows /  count_winner\n    prize_slice = int(prize_slice)",
         "detail": "db",
         "documentation": {}
     },
@@ -372,7 +372,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def find_winner_from_db(table_name , id) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(config.DATABASE_PATH)\n    curl = conn.cursor()\n    rowsQuery = f\"SELECT * FROM {table_name} where ROW='{id}'\"\n    curl.execute(rowsQuery)\n    rows = curl.fetchall()\n    conn.commit()\n    conn.close()\n    winner_name , winer_phone = rows[0][1] , rows[0][2]",
+        "peekOfCode": "def find_winner_from_db(table_name , id) :\n    '''this function  find winner by count of prize in table '''\n    con = sqlite3.connect(config.DATABASE_PATH)\n    cur = con.cursor()\n    rowsQuery = f\"SELECT * FROM {table_name} where ROW='{id}'\"\n    cur.execute(rowsQuery)\n    rows = cur.fetchall()\n    con.commit()\n    con.close()\n    winner_name , winer_phone = rows[0][1] , rows[0][2]",
         "detail": "db",
         "documentation": {}
     },
@@ -390,7 +390,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def find_tables_name():\n    '''this function return db tables name '''\n    conn = sqlite3.connect(config.DATABASE_PATH)\n    curl = conn.cursor()\n    Query = \"SELECT name FROM sqlite_master WHERE type='table';\"\n    curl.execute(Query)\n    tables_names  = curl.fetchall()\n    conn.commit()\n    conn.close()\n    table_list  = []",
+        "peekOfCode": "def find_tables_name():\n    '''this function return db tables name '''\n    con = sqlite3.connect(config.DATABASE_PATH)\n    cur = con.cursor()\n    Query = \"SELECT name FROM sqlite_master WHERE type='table';\"\n    cur.execute(Query)\n    tables_names  = cur.fetchall()\n    con.commit()\n    con.close()\n    table_list  = []",
         "detail": "db",
         "documentation": {}
     },
@@ -399,7 +399,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def delete_table(table_name):\n    try :\n        '''this function  delete table from db   '''\n        con = sqlite3.connect(config.DATABASE_PATH)\n        curl = con.cursor()\n        sql_query = f\"DROP TABLE {table_name} ;\"\n        curl.execute(sql_query)\n        con.commit()\n        con.close()\n        Message = \"data deleted  successfully\"",
+        "peekOfCode": "def delete_table(table_name):\n    try :\n        '''this function  delete table from db   '''\n        con = sqlite3.connect(config.DATABASE_PATH)\n        cur = con.cursor()\n        sql_query = f\"DROP TABLE {table_name} ;\"\n        cur.execute(sql_query)\n        con.commit()\n        con.close()\n        Message = \"data deleted  successfully\"",
         "detail": "db",
         "documentation": {}
     }
