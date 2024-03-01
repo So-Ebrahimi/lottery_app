@@ -228,7 +228,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def page_not_found(e):\n    return render_template(\"500.html\")\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"0.0.0.0\", port=\"12345\")",
+        "peekOfCode": "def page_not_found(e):\n    return render_template(\"500.html\")\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"0.0.0.0\", port=\"12345\",debug=True)",
         "detail": "app",
         "documentation": {}
     },
@@ -237,7 +237,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"0.0.0.0\", port=\"12345\")",
+        "peekOfCode": "def load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"0.0.0.0\", port=\"12345\",debug=True)",
         "detail": "app",
         "documentation": {}
     },
@@ -345,7 +345,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(config.DATABASE_PATH)\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)\n        df = pd.DataFrame(sql_query)\n        con.commit()\n        con.close()\n        return (df)\ndef update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"",
+        "peekOfCode": "def table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(config.DATABASE_PATH)\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)\n        df = pd.DataFrame(sql_query)\n        con.commit()\n        con.close()\n        return (df)\ndef update_db(path ,table_name ,re_ap )  :\n    \"\"\"update database from xlsx file  \"\"\"",
         "detail": "db",
         "documentation": {}
     },
@@ -354,7 +354,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"\n    conn = sqlite3.connect(config.DATABASE_PATH)\n    curl = conn.cursor()\n    #upload new data to db \n    df = pd.read_excel(path)\n    df.to_sql(name=table_name,con=conn,if_exists='replace',index=False)\n    conn.commit()\n    curl.execute(f\"SELECT Count(*) FROM {table_name}\" )\n    numberOfRows = curl.fetchone()[0]",
+        "peekOfCode": "def update_db(path ,table_name ,re_ap )  :\n    \"\"\"update database from xlsx file  \"\"\"\n    conn = sqlite3.connect(config.DATABASE_PATH)\n    curl = conn.cursor()\n    #upload new data to db \n    df = pd.read_excel(path)\n    df.to_sql(name=table_name,con=conn,if_exists=re_ap ,index=False)\n    conn.commit()\n    curl.execute(f\"SELECT Count(*) FROM {table_name}\" )\n    numberOfRows = curl.fetchone()[0]",
         "detail": "db",
         "documentation": {}
     },

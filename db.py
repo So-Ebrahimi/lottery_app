@@ -11,13 +11,13 @@ def table_view_of_db(table_name) :
         con.close()
         return (df)
 
-def update_db(path ,table_name)  :
+def update_db(path ,table_name ,re_ap )  :
     """update database from xlsx file  """
     conn = sqlite3.connect(config.DATABASE_PATH)
     curl = conn.cursor()
     #upload new data to db 
     df = pd.read_excel(path)
-    df.to_sql(name=table_name,con=conn,if_exists='replace',index=False)
+    df.to_sql(name=table_name,con=conn,if_exists=re_ap ,index=False)
     conn.commit()
     curl.execute(f"SELECT Count(*) FROM {table_name}" )
     numberOfRows = curl.fetchone()[0]
