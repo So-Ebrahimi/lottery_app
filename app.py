@@ -1,26 +1,23 @@
-from datetime import  datetime
 import os
-from werkzeug.utils import secure_filename
-from flask import Flask , Response, redirect, url_for, request, session, abort , flash , render_template ,send_file
-from flask_login import LoginManager, UserMixin, \
-                                login_required, login_user, logout_user 
 import pandas as pd 
+from datetime import  datetime
+from werkzeug.utils import secure_filename
+from flask import Flask , Response, redirect, url_for\
+                            , request, session, abort , flash , render_template ,send_file
+from flask_login import LoginManager, UserMixin, \
+                            login_required, login_user, logout_user 
 from  db  import *
+import config
+
 #init
 app = Flask(__name__)
 
 #local variable 
-UPLOAD_FOLDER = ''
-ALLOWED_EXTENSIONS = {'xlsx'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-#USERNAME & PASSWORD
-correct_username = "sobhan"
-correct_password = "1234"
+app.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER
 
 # config SECRET_KEY
 app.config.update(
-    SECRET_KEY = 'secret_xxx'
+    SECRET_KEY = config.SECRET_KEY
 )
 
 # flask-login
@@ -42,12 +39,18 @@ user = User(0)
 def allowed_file(filename):
     """ checks the extension of the passed filename to be in the allowed extensions"""
     return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1].lower() in config.ALLOWED_EXTENSIONS
 
+#root
+@app.route("/")
+@login_required
+def root():
+    return redirect("/home")
+    
 # some protected url
 @app.route('/home', methods=['GET', 'POST'])
 @login_required
-def root():
+def home():
     '''home direct aff lottery web app '''
     tables_name = find_tables_name()
     df = pd.DataFrame()
@@ -61,11 +64,13 @@ def root():
             winners_dict = Find_winner_id( table , numberOfRows , prize_slice ,winner_id )
             df = pd.DataFrame(winners_dict) 
             df = df.T
-            df.to_excel("backup_winners/" + table + "_" + str(datetime.now().strftime("%Y-%m-%d %H_%M_%S"))+".xlsx")
+            df.to_excel("backup_winners/" + table + "_" + 
+                        str(datetime.now().strftime("%Y-%m-%d %H_%M_%S"))+".xlsx")
             df.to_excel("output.xlsx")
         except :
             pass            
-    return render_template("home.html" , count_winner=count_winner ,  numberOfRows=numberOfRows  , prize_slice=prize_slice , tables_name = tables_name,
+    return render_template("home.html" , count_winner=count_winner ,  numberOfRows=numberOfRows  ,
+                                        prize_slice=prize_slice    ,    tables_name = tables_name,
                                         column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
 
 # somewhere to login
@@ -75,7 +80,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']        
-        if username == correct_username and password == correct_password :
+        if username == config.CORRECT_USERNAME and password == config.CORRECT_PASSWORD :
             login_user(user)
             return redirect("/home")
         else:
@@ -178,4 +183,4 @@ def load_user(userid):
 
 
 if __name__ ==  "__main__":
-    app.run(host="0.0.0.0", port="12345",debug=True)
+    app.run(host="0.0.0.0", port="12345")

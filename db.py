@@ -1,12 +1,10 @@
 import pandas as pd 
 import sqlite3
-
-
-
+import config
 
 def table_view_of_db(table_name) :
         '''this function  findshow all of the memeber of db  '''
-        con = sqlite3.connect("sql.db")
+        con = sqlite3.connect(config.DATABASE_PATH)
         sql_query = pd.read_sql(f"SELECT * FROM {table_name}", con)
         df = pd.DataFrame(sql_query)
         con.commit()
@@ -15,7 +13,7 @@ def table_view_of_db(table_name) :
 
 def update_db(path ,table_name)  :
     """update database from xlsx file  """
-    conn = sqlite3.connect("sql.db")
+    conn = sqlite3.connect(config.DATABASE_PATH)
     curl = conn.cursor()
     #upload new data to db 
     df = pd.read_excel(path)
@@ -25,12 +23,11 @@ def update_db(path ,table_name)  :
     numberOfRows = curl.fetchone()[0]
     conn.commit()
     conn.close()
-    print("Db  updated suxcesfully")
     return (numberOfRows)
 
 def Find_prize_slice(table_name , count_winner ) :
     '''this function  find winner by count of prize in table '''
-    conn = sqlite3.connect("sql.db")
+    conn = sqlite3.connect(config.DATABASE_PATH)
     curl = conn.cursor()
     curl.execute("SELECT Count() FROM %s" % table_name )
     numberOfRows = curl.fetchone()[0]
@@ -42,7 +39,7 @@ def Find_prize_slice(table_name , count_winner ) :
 
 def find_winner_from_db(table_name , id) :
     '''this function  find winner by count of prize in table '''
-    conn = sqlite3.connect("sql.db")
+    conn = sqlite3.connect(config.DATABASE_PATH)
     curl = conn.cursor()
     rowsQuery = f"SELECT * FROM {table_name} where ROW='{id}'"
     curl.execute(rowsQuery)
@@ -68,7 +65,7 @@ def Find_winner_id( table_name, numberOfRows , prize_slice ,winner_id ):
 
 def find_tables_name():
     '''this function return db tables name '''
-    conn = sqlite3.connect("sql.db")
+    conn = sqlite3.connect(config.DATABASE_PATH)
     curl = conn.cursor()
     Query = "SELECT name FROM sqlite_master WHERE type='table';"
     curl.execute(Query)
@@ -83,7 +80,7 @@ def find_tables_name():
 def delete_table(table_name):
     try :
         '''this function  delete table from db   '''
-        con = sqlite3.connect("sql.db")
+        con = sqlite3.connect(config.DATABASE_PATH)
         curl = con.cursor()
         sql_query = f"DROP TABLE {table_name} ;"
         curl.execute(sql_query)

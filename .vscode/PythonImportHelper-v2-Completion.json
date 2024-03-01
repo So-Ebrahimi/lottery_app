@@ -1,19 +1,28 @@
 [
     {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
         "label": "os",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "os",
         "description": "os",
         "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
         "documentation": {}
     },
     {
@@ -49,55 +58,7 @@
         "documentation": {}
     },
     {
-        "label": "url_for",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "request",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "session",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "abort",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "flash",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "render_template",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "send_file",
+        "label": "url_for\\",
         "importPath": "flask",
         "description": "flask",
         "isExtraImport": true,
@@ -129,20 +90,20 @@
         "documentation": {}
     },
     {
-        "label": "pandas",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "pandas",
-        "description": "pandas",
-        "detail": "pandas",
-        "documentation": {}
-    },
-    {
         "label": "*",
         "importPath": "db ",
         "description": "db ",
         "isExtraImport": true,
         "detail": "db ",
+        "documentation": {}
+    },
+    {
+        "label": "config",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "config",
+        "description": "config",
+        "detail": "config",
         "documentation": {}
     },
     {
@@ -168,7 +129,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def allowed_file(filename):\n    \"\"\" checks the extension of the passed filename to be in the allowed extensions\"\"\"\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/home', methods=['GET', 'POST'])\n@login_required\ndef root():\n    '''home direct aff lottery web app '''\n    tables_name = find_tables_name()",
+        "peekOfCode": "def allowed_file(filename):\n    \"\"\" checks the extension of the passed filename to be in the allowed extensions\"\"\"\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in config.ALLOWED_EXTENSIONS\n#root\n@app.route(\"/\")\n@login_required\ndef root():\n    return redirect(\"/home\")\n# some protected url",
         "detail": "app",
         "documentation": {}
     },
@@ -177,7 +138,16 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def root():\n    '''home direct aff lottery web app '''\n    tables_name = find_tables_name()\n    df = pd.DataFrame()\n    count_winner, numberOfRows, prize_slice  = \"###\" , \"###\" ,\"###\"\n    if request.method == 'POST':\n        try : \n            table = request.form.get('table_name')\n            count_winner =  int(request.form.get('count_winner'))\n            numberOfRows , prize_slice = Find_prize_slice(table , count_winner )",
+        "peekOfCode": "def root():\n    return redirect(\"/home\")\n# some protected url\n@app.route('/home', methods=['GET', 'POST'])\n@login_required\ndef home():\n    '''home direct aff lottery web app '''\n    tables_name = find_tables_name()\n    df = pd.DataFrame()\n    count_winner, numberOfRows, prize_slice  = \"###\" , \"###\" ,\"###\"",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "home",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def home():\n    '''home direct aff lottery web app '''\n    tables_name = find_tables_name()\n    df = pd.DataFrame()\n    count_winner, numberOfRows, prize_slice  = \"###\" , \"###\" ,\"###\"\n    if request.method == 'POST':\n        try : \n            table = request.form.get('table_name')\n            count_winner =  int(request.form.get('count_winner'))\n            numberOfRows , prize_slice = Find_prize_slice(table , count_winner )",
         "detail": "app",
         "documentation": {}
     },
@@ -186,7 +156,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def login():\n    \"\"\" user login: only for admin user (system has no other user than admin)\"\"\"\n    if request.method == 'POST':\n        username = request.form['username']\n        password = request.form['password']        \n        if username == correct_username and password == correct_password :\n            login_user(user)\n            return redirect(\"/home\")\n        else:\n            return abort(401)",
+        "peekOfCode": "def login():\n    \"\"\" user login: only for admin user (system has no other user than admin)\"\"\"\n    if request.method == 'POST':\n        username = request.form['username']\n        password = request.form['password']        \n        if username == config.CORRECT_USERNAME and password == config.CORRECT_PASSWORD :\n            login_user(user)\n            return redirect(\"/home\")\n        else:\n            return abort(401)",
         "detail": "app",
         "documentation": {}
     },
@@ -258,7 +228,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def page_not_found(e):\n    return render_template(\"500.html\")\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"0.0.0.0\", port=\"12345\",debug=True)",
+        "peekOfCode": "def page_not_found(e):\n    return render_template(\"500.html\")\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"0.0.0.0\", port=\"12345\")",
         "detail": "app",
         "documentation": {}
     },
@@ -267,7 +237,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"0.0.0.0\", port=\"12345\",debug=True)",
+        "peekOfCode": "def load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"0.0.0.0\", port=\"12345\")",
         "detail": "app",
         "documentation": {}
     },
@@ -276,25 +246,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "app = Flask(__name__)\n#local variable \nUPLOAD_FOLDER = ''\nALLOWED_EXTENSIONS = {'xlsx'}\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n#USERNAME & PASSWORD\ncorrect_username = \"sobhan\"\ncorrect_password = \"1234\"\n# config SECRET_KEY\napp.config.update(",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
-        "label": "UPLOAD_FOLDER",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "UPLOAD_FOLDER = ''\nALLOWED_EXTENSIONS = {'xlsx'}\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n#USERNAME & PASSWORD\ncorrect_username = \"sobhan\"\ncorrect_password = \"1234\"\n# config SECRET_KEY\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
-        "label": "ALLOWED_EXTENSIONS",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "ALLOWED_EXTENSIONS = {'xlsx'}\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n#USERNAME & PASSWORD\ncorrect_username = \"sobhan\"\ncorrect_password = \"1234\"\n# config SECRET_KEY\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login",
+        "peekOfCode": "app = Flask(__name__)\n#local variable \napp.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER\n# config SECRET_KEY\napp.config.update(\n    SECRET_KEY = config.SECRET_KEY\n)\n# flask-login\nlogin_manager = LoginManager()\nlogin_manager.init_app(app)",
         "detail": "app",
         "documentation": {}
     },
@@ -303,25 +255,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\n#USERNAME & PASSWORD\ncorrect_username = \"sobhan\"\ncorrect_password = \"1234\"\n# config SECRET_KEY\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
-        "label": "correct_username",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "correct_username = \"sobhan\"\ncorrect_password = \"1234\"\n# config SECRET_KEY\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()\nlogin_manager.init_app(app)\nlogin_manager.login_view = \"login\"",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
-        "label": "correct_password",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "correct_password = \"1234\"\n# config SECRET_KEY\napp.config.update(\n    SECRET_KEY = 'secret_xxx'\n)\n# flask-login\nlogin_manager = LoginManager()\nlogin_manager.init_app(app)\nlogin_manager.login_view = \"login\"\nclass User(UserMixin):",
+        "peekOfCode": "app.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER\n# config SECRET_KEY\napp.config.update(\n    SECRET_KEY = config.SECRET_KEY\n)\n# flask-login\nlogin_manager = LoginManager()\nlogin_manager.init_app(app)\nlogin_manager.login_view = \"login\"\nclass User(UserMixin):",
         "detail": "app",
         "documentation": {}
     },
@@ -348,8 +282,62 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "user = User(0)\ndef allowed_file(filename):\n    \"\"\" checks the extension of the passed filename to be in the allowed extensions\"\"\"\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS\n# some protected url\n@app.route('/home', methods=['GET', 'POST'])\n@login_required\ndef root():\n    '''home direct aff lottery web app '''",
+        "peekOfCode": "user = User(0)\ndef allowed_file(filename):\n    \"\"\" checks the extension of the passed filename to be in the allowed extensions\"\"\"\n    return '.' in filename and \\\n        filename.rsplit('.', 1)[1].lower() in config.ALLOWED_EXTENSIONS\n#root\n@app.route(\"/\")\n@login_required\ndef root():\n    return redirect(\"/home\")",
         "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "UPLOAD_FOLDER",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "UPLOAD_FOLDER = ''\nALLOWED_EXTENSIONS = {'xlsx'}\n# login cedentials\nCORRECT_USERNAME = \"sobhan\"\nCORRECT_PASSWORD = \"1234\"\n# generate one strong secret key for flask.\n# random long string with alphanumeric + #()*&\nSECRET_KEY = 'asddFADFAF#@12ea'\n#dataase configure\nDATABASE_PATH = \"sql.db\"",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "ALLOWED_EXTENSIONS",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "ALLOWED_EXTENSIONS = {'xlsx'}\n# login cedentials\nCORRECT_USERNAME = \"sobhan\"\nCORRECT_PASSWORD = \"1234\"\n# generate one strong secret key for flask.\n# random long string with alphanumeric + #()*&\nSECRET_KEY = 'asddFADFAF#@12ea'\n#dataase configure\nDATABASE_PATH = \"sql.db\"",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "CORRECT_USERNAME",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "CORRECT_USERNAME = \"sobhan\"\nCORRECT_PASSWORD = \"1234\"\n# generate one strong secret key for flask.\n# random long string with alphanumeric + #()*&\nSECRET_KEY = 'asddFADFAF#@12ea'\n#dataase configure\nDATABASE_PATH = \"sql.db\"",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "CORRECT_PASSWORD",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "CORRECT_PASSWORD = \"1234\"\n# generate one strong secret key for flask.\n# random long string with alphanumeric + #()*&\nSECRET_KEY = 'asddFADFAF#@12ea'\n#dataase configure\nDATABASE_PATH = \"sql.db\"",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "SECRET_KEY",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "SECRET_KEY = 'asddFADFAF#@12ea'\n#dataase configure\nDATABASE_PATH = \"sql.db\"",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "DATABASE_PATH",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "DATABASE_PATH = \"sql.db\"",
+        "detail": "config",
         "documentation": {}
     },
     {
@@ -357,7 +345,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(\"sql.db\")\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)\n        df = pd.DataFrame(sql_query)\n        con.commit()\n        con.close()\n        return (df)\ndef update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"",
+        "peekOfCode": "def table_view_of_db(table_name) :\n        '''this function  findshow all of the memeber of db  '''\n        con = sqlite3.connect(config.DATABASE_PATH)\n        sql_query = pd.read_sql(f\"SELECT * FROM {table_name}\", con)\n        df = pd.DataFrame(sql_query)\n        con.commit()\n        con.close()\n        return (df)\ndef update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"",
         "detail": "db",
         "documentation": {}
     },
@@ -366,7 +354,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    #upload new data to db \n    df = pd.read_excel(path)\n    df.to_sql(name=table_name,con=conn,if_exists='replace',index=False)\n    conn.commit()\n    curl.execute(f\"SELECT Count(*) FROM {table_name}\" )\n    numberOfRows = curl.fetchone()[0]",
+        "peekOfCode": "def update_db(path ,table_name)  :\n    \"\"\"update database from xlsx file  \"\"\"\n    conn = sqlite3.connect(config.DATABASE_PATH)\n    curl = conn.cursor()\n    #upload new data to db \n    df = pd.read_excel(path)\n    df.to_sql(name=table_name,con=conn,if_exists='replace',index=False)\n    conn.commit()\n    curl.execute(f\"SELECT Count(*) FROM {table_name}\" )\n    numberOfRows = curl.fetchone()[0]",
         "detail": "db",
         "documentation": {}
     },
@@ -375,7 +363,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def Find_prize_slice(table_name , count_winner ) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    curl.execute(\"SELECT Count() FROM %s\" % table_name )\n    numberOfRows = curl.fetchone()[0]\n    conn.commit()\n    conn.close()\n    prize_slice = numberOfRows /  count_winner\n    prize_slice = int(prize_slice)",
+        "peekOfCode": "def Find_prize_slice(table_name , count_winner ) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(config.DATABASE_PATH)\n    curl = conn.cursor()\n    curl.execute(\"SELECT Count() FROM %s\" % table_name )\n    numberOfRows = curl.fetchone()[0]\n    conn.commit()\n    conn.close()\n    prize_slice = numberOfRows /  count_winner\n    prize_slice = int(prize_slice)",
         "detail": "db",
         "documentation": {}
     },
@@ -384,7 +372,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def find_winner_from_db(table_name , id) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    rowsQuery = f\"SELECT * FROM {table_name} where ROW='{id}'\"\n    curl.execute(rowsQuery)\n    rows = curl.fetchall()\n    conn.commit()\n    conn.close()\n    winner_name , winer_phone = rows[0][1] , rows[0][2]",
+        "peekOfCode": "def find_winner_from_db(table_name , id) :\n    '''this function  find winner by count of prize in table '''\n    conn = sqlite3.connect(config.DATABASE_PATH)\n    curl = conn.cursor()\n    rowsQuery = f\"SELECT * FROM {table_name} where ROW='{id}'\"\n    curl.execute(rowsQuery)\n    rows = curl.fetchall()\n    conn.commit()\n    conn.close()\n    winner_name , winer_phone = rows[0][1] , rows[0][2]",
         "detail": "db",
         "documentation": {}
     },
@@ -402,7 +390,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def find_tables_name():\n    '''this function return db tables name '''\n    conn = sqlite3.connect(\"sql.db\")\n    curl = conn.cursor()\n    Query = \"SELECT name FROM sqlite_master WHERE type='table';\"\n    curl.execute(Query)\n    tables_names  = curl.fetchall()\n    conn.commit()\n    conn.close()\n    table_list  = []",
+        "peekOfCode": "def find_tables_name():\n    '''this function return db tables name '''\n    conn = sqlite3.connect(config.DATABASE_PATH)\n    curl = conn.cursor()\n    Query = \"SELECT name FROM sqlite_master WHERE type='table';\"\n    curl.execute(Query)\n    tables_names  = curl.fetchall()\n    conn.commit()\n    conn.close()\n    table_list  = []",
         "detail": "db",
         "documentation": {}
     },
@@ -411,7 +399,7 @@
         "kind": 2,
         "importPath": "db",
         "description": "db",
-        "peekOfCode": "def delete_table(table_name):\n    try :\n        '''this function  delete table from db   '''\n        con = sqlite3.connect(\"sql.db\")\n        curl = con.cursor()\n        sql_query = f\"DROP TABLE {table_name} ;\"\n        curl.execute(sql_query)\n        con.commit()\n        con.close()\n        Message = \"data deleted  successfully\"",
+        "peekOfCode": "def delete_table(table_name):\n    try :\n        '''this function  delete table from db   '''\n        con = sqlite3.connect(config.DATABASE_PATH)\n        curl = con.cursor()\n        sql_query = f\"DROP TABLE {table_name} ;\"\n        curl.execute(sql_query)\n        con.commit()\n        con.close()\n        Message = \"data deleted  successfully\"",
         "detail": "db",
         "documentation": {}
     }
