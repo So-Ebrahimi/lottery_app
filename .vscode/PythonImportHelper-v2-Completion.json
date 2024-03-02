@@ -237,7 +237,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def error(e):\n    return render_template(\"500.html\")\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"0.0.0.0\", port=\"12345\",debug=True)",
+        "peekOfCode": "def error(e):\n    return render_template(\"500.html\")\n# callback to reload the user object        \n@login_manager.user_loader\ndef load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"192.168.100.200\", port=\"12345\",debug=True)",
         "detail": "app",
         "documentation": {}
     },
@@ -246,7 +246,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"0.0.0.0\", port=\"12345\",debug=True)",
+        "peekOfCode": "def load_user(userid):\n    return User(userid)\nif __name__ ==  \"__main__\":\n    app.run(host=\"192.168.100.200\", port=\"12345\",debug=True)",
         "detail": "app",
         "documentation": {}
     },
