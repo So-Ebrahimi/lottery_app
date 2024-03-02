@@ -10,6 +10,7 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="static/css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="static/js/jquery.min.js"></script>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -58,6 +59,9 @@
                             </a>
                         </div>
                     </div>
+                    <div>
+                        <div  id="loading" style="display:none;"><img src="static/assets/loading5.gif" /></div>
+                    </div>
                     <div class="sb-sidenav-footer">
                         <p id="datetime"></p>
                     </div>
@@ -87,8 +91,8 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <input type=submit >
-                                </div>    
+                                    <input type=submit onclick="$('#loading').show();">
+                                </div>
                                 </form>
                             </div>
                         </div>

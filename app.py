@@ -1,5 +1,6 @@
 import os
 import pandas as pd 
+import time
 from datetime import  datetime
 from werkzeug.utils import secure_filename
 from flask import Flask , Response, redirect, url_for\
@@ -67,6 +68,7 @@ def home():
             df.to_excel("backup_winners/" + table + "_" + 
                         str(datetime.now().strftime("%Y-%m-%d %H_%M_%S"))+".xlsx")
             df.to_excel("output.xlsx")
+            time.sleep(3)
         except :
             pass            
     return render_template("home.html" , count_winner=count_winner ,  numberOfRows=numberOfRows  ,
