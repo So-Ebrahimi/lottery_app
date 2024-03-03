@@ -1,6 +1,6 @@
-#lottery web app!
+# lottery web app!
 
-Description
+## Description
 
 This project is a simple web application written in Python using the Flask and sqlite3 libraries. This program allows you to:
 
@@ -10,7 +10,7 @@ Enter a number of winner  as input.
 
 Determine the winners of the lottery based on the number of people and the input number.
 
-Program Pages
+ ## Program Pages :
 
 Home: This page allows you to enter the number of people and run the raffle.
 
@@ -21,7 +21,7 @@ View Database Page: This page displays all the information in the database.
 Delete from Database Page: This page allows you to delete table from the database.
 
 
-Installation
+## Installation
 
 Prerequisites:
 
@@ -63,8 +63,10 @@ python app.py
 ```
 Go to http://localhost:12345 in your browser.
 
-
-Page Guide
+username = "user"
+password = "pass"
+(!you can change username and password in config.py file )
+## Page Guide
 
 Homepage:
 
@@ -92,14 +94,14 @@ Delete  Database Page:
 
 delete tables data 
 
-Notes
+## Notes
 
 This program is a simple example and you can extend it based on your needs.
 
 For more information on the Flask and sqlite3 libraries, refer to their documentation.
 
-Resources
+## Resources
 
-Flask Documentation: https://flask.palletsprojects.com/en/2.2.x/
+Flask Documentation: https://flask.palletsprojects.com
 
 sqlite3 Documentation: https://docs.python.org/3/library/sqlite3.html
