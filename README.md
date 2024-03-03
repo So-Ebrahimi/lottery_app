@@ -67,6 +67,11 @@ python app.py
 ```
 Go to http://localhost:12345 in your browser.
 
+username and password is available in config.py 
+
+<div align="center">
+      <img width="100%" src="https://github.com/So-Ebrahimi/lottery_app/blob/main/REDME_IMG/6.JPG"></a>
+ </div>
 
 ## Page Guide
 
@@ -83,18 +88,30 @@ Click the submit Query.
 The list of lttery winners will be displayed.
 
 can download list with Download csv button 
+<div align="center">
+      <img width="100%" src="https://github.com/So-Ebrahimi/lottery_app/blob/main/REDME_IMG/2.JPG"></a>
+ </div>
 
 view Database Page:
 
 A list of all the information in the database is displayed.
+<div align="center">
+      <img width="100%" src="https://github.com/So-Ebrahimi/lottery_app/blob/main/REDME_IMG/3.JPG"></a>
+ </div>
 
 upload Database Page:
 
 upload xlsx file with "RAW" "NAME" "PHONE" collums and write your table name 
+<div align="center">
+      <img width="100%" src="https://github.com/So-Ebrahimi/lottery_app/blob/main/REDME_IMG/4.JPG"></a>
+ </div>
 
 Delete  Database Page:
 
 delete tables data 
+<div align="center">
+      <img width="100%" src="https://github.com/So-Ebrahimi/lottery_app/blob/main/REDME_IMG/5.JPG"></a>
+ </div>
 
 ## Notes
 
