@@ -92,7 +92,7 @@ Delete  Database Page:
 
 delete tables data 
 
-Notes
+## Notes
 
 This program is a simple example and you can extend it based on your needs.
 
