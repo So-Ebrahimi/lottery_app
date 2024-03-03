@@ -1,5 +1,7 @@
 # lottery web app!
+# lottery web app!
 
+## Description
 ## Description
 
 This project is a simple web application written in Python using the Flask and sqlite3 libraries. This program allows you to:
@@ -63,10 +65,8 @@ python app.py
 ```
 Go to http://localhost:12345 in your browser.
 
-username = "user"
-password = "pass"
-(!you can change username and password in config.py file )
-## Page Guide
+
+Page Guide
 
 Homepage:
 
