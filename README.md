@@ -1,5 +1,4 @@
-#Title!
-lottery web app
+#lottery web app!
 
 Description
 
@@ -34,7 +33,6 @@ Clone the project from GitHub:
 
 ```bash
 git clone https://github.com/So-Ebrahimi/lottery_app.git
-
 ```
 
 Go to the project folder:
@@ -44,25 +42,26 @@ cd lottery_app
 ```
 
 Crate and Activate the Python virtual environment:
-
+```bash
 python -m venv .venv
+```
 
-
-
+```bash
 cd .venv/Scripts
-
+```
+```bash
 activat.bat 
-
+```
 Install the required libraries:
-
+```bash
 pip install -r requirements.txt
+```
 
 Run the program:
-
+```bash
 python app.py
-
+```
 Go to http://localhost:12345 in your browser.
-
 
 
 Page Guide
