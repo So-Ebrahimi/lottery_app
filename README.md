@@ -3,6 +3,7 @@
 <div align="center">
       <img width="100%" src="https://github.com/So-Ebrahimi/lottery_app/blob/main/REDME_IMG/1.JPG"></a>
  </div>
+ 
 ## Description
 
 This project is a simple web application written in Python using the Flask and sqlite3 libraries. This program allows you to:
