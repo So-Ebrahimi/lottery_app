@@ -190,4 +190,4 @@ def load_user(userid):
 
 
 if __name__ ==  "__main__":
-    app.run(host="192.168.100.200", port="12345",debug=True)
+    app.run(host="0.0.0.0", port="12345",debug=False)
