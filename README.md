@@ -100,6 +100,6 @@ For more information on the Flask and sqlite3 libraries, refer to their document
 
 ## Resources
 
-Flask Documentation: https://flask.palletsprojects.com/en/3.0.x
+Flask Documentation: https://flask.palletsprojects.com
 
 sqlite3 Documentation: https://docs.python.org/3/library/sqlite3.html
